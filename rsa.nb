@@ -1,0 +1,683 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     29255,        675]
+NotebookOptionsPosition[     18945,        440]
+NotebookOutlinePosition[     25286,        580]
+CellTagsIndexPosition[     25243,        577]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["RSA", "Title",
+ CellChangeTimes->{{3.700774153171832*^9, 3.700774159196458*^9}, {
+  3.705104157104324*^9, 3.7051041574063416`*^9}, {3.70568519155404*^9, 
+  3.705685209964157*^9}, {3.7069066569829845`*^9, 
+  3.7069066574977856`*^9}},ExpressionUUID->"b5650962-d093-42c5-bc9d-\
+c7baf07c42c0"],
+
+Cell["A simple Public Key Cryptosystem ", "Abstract",
+ CellChangeTimes->{{3.700774172671139*^9, 3.700774220850109*^9}, {
+  3.700778895632181*^9, 3.700778896308676*^9}, {3.7051041615775795`*^9, 
+  3.705104170817108*^9}, {3.7069068189743304`*^9, 
+  3.7069068401781693`*^9}},ExpressionUUID->"0ebf692a-29c7-49a1-b6a5-\
+c74619e72377"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ CellChangeTimes->{{3.700774708350976*^9, 3.700774714085747*^9}, {
+  3.7051042493566003`*^9, 3.7051042513157125`*^9}, {3.705686166481989*^9, 
+  3.7056861672865133`*^9}, {3.7069069670431385`*^9, 
+  3.706906969356943*^9}},ExpressionUUID->"ad6db0f2-1428-4f79-b2db-\
+f73f6f49cf33"],
+
+Cell["\<\
+Public-key cryptography, also known as asymmetric cryptography, uses two \
+different but mathematically linked keys, one public and one private. The \
+public key can be shared with everyone, whereas the private key must be kept \
+secret. In RSA cryptography, both the public and the private keys can encrypt \
+a message; the opposite key from the one used to encrypt a message is used to \
+decrypt it. This attribute is one reason why RSA has become the most widely \
+used asymmetric algorithm: It provides a method of assuring the \
+confidentiality, integrity, authenticity and non-reputability of electronic \
+communications and data storage. \
+\>", "Text",
+ CellChangeTimes->{{3.700774312865305*^9, 3.700774350341485*^9}, {
+   3.7051042689957237`*^9, 3.7051043842073135`*^9}, {3.705105072313671*^9, 
+   3.705105092602831*^9}, {3.705683778330366*^9, 3.705683783009487*^9}, 
+   3.7069069954428897`*^9, 3.7069070536391473`*^9, {3.7069564958689623`*^9, 
+   3.706956499347768*^9}},ExpressionUUID->"6506b4c3-6649-44c0-8d22-\
+1c0360567133"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Algorithm", "Section",
+ CellChangeTimes->{{3.70510464885445*^9, 3.7051046548567934`*^9}, {
+  3.7051046932679906`*^9, 3.7051047014174566`*^9}, {3.705686116931855*^9, 
+  3.7056861543411007`*^9}, {3.7069177434308133`*^9, 
+  3.706917755809885*^9}},ExpressionUUID->"c545fb8f-a78e-4810-8c42-\
+d3baf52498e9"],
+
+Cell[TextData[{
+ "The idea of the algorithm is to encrypt some message between two users. \n\n\
+1) First, each user chooses two big primes ",
+ StyleBox["p", "Code"],
+ " and ",
+ StyleBox["q", "Code"],
+ Cell[BoxData[
+  FormBox[Cell["\<\
+
+\
+\>",ExpressionUUID->"56faa8c9-93a5-4a51-98b7-2fd54a56eef9"], 
+   TraditionalForm]],ExpressionUUID->"d79303a8-8c3d-4243-8933-0472748f6024"],
+ ". This is 1024 binary digit number"
+}], "Text",
+ CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
+   3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
+   3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, {
+   3.706958506665468*^9, 3.706958514278281*^9}, {3.706958598832361*^9, 
+   3.706958613743233*^9}, 
+   3.7069612723512874`*^9},ExpressionUUID->"42496358-5f82-4a09-9353-\
+4e99690d45e8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"p", ",", "q"}], "}"}], "=", 
+  RowBox[{"RandomPrime", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"2", "^", "1023"}], ",", 
+      RowBox[{"2", "^", "1024"}]}], "}"}], ",", "2"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.706958518115888*^9, 3.70695854118935*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"565eb0d2-2d13-4a77-b2fe-ae8320176a12"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "958808332107602079817350786332183179336012451416209213656697234016014968347\
+335552163640920551805370029571323345558758337768862599648315413925847160297679\
+280286231333968211154383438386507420352569567807677019263382972738516705730203\
+13878404357652536963133481526970229099342435043606901858276757186897260471941"\
+, ",", "1350589949308865411001201042176835235768431516095422612042744005684340\
+730793207717377393753514532516356816880289063465863504877138774956369544960796\
+026693495353543550712727914337889193547317981049631977375575555475403960626553\
+030739854733786847280730783260036664159030998212971802796132513468262363278755\
+86379"}], "}"}]], "Output",
+ CellChangeTimes->{{3.706958530309329*^9, 3.706958543934955*^9}},
+ CellLabel->"Out[2]=",ExpressionUUID->"af1f07cf-79b4-4fdb-bccf-e9003a33c95c"]
+}, Open  ]],
+
+Cell["\<\
+
+2) Then they compute the products n = pq and t = (p-1)(q-1). p and q can be \
+discarded now. \
+\>", "Text",
+ CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
+   3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
+   3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, 
+   3.7069585126090784`*^9, {3.7069585673514023`*^9, 
+   3.7069585826940317`*^9}},ExpressionUUID->"daf99bdd-5a22-4d21-9761-\
+16976696b110"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"n", " ", "=", " ", 
+  RowBox[{"p", " ", "*", " ", "q"}]}], "\n", 
+ RowBox[{"t", " ", "=", " ", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"p", "-", "1"}], ")"}], 
+   RowBox[{"(", 
+    RowBox[{"q", "-", "1"}], ")"}]}]}]}], "Code",
+ CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
+   3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
+   3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, 
+   3.7069585126090784`*^9, {3.7069585673514023`*^9, 3.706958575541417*^9}, {
+   3.706958624504058*^9, 3.7069586632931404`*^9}},
+ CellLabel->"In[5]:=",ExpressionUUID->"4ff926cc-9de3-4fb3-aa57-b5d27cdeca42"],
+
+Cell[BoxData[\
+"12949568966581240850606003096810963088718782408149632706991303274394343514876\
+832830631134634636018005345110636655823825172560809897965647770564083245862127\
+555054166475040297473152596656641710048570391338183023677231570565857281605746\
+747872115056444441732458603339269101212989292296925686364057293240492657357482\
+181628067833141008183732648354934079227635896969734577888345524834882713532755\
+887702082037577448586653949942905323208524006908121862728835116657760414353031\
+903124922192290436820638746516134194062663664226594574617745689571553277956427\
+364012777650333196882842170323623434553304739175506422416942353651291639"], \
+"Output",
+ CellChangeTimes->{{3.7069586423008957`*^9, 3.7069586650559435`*^9}},
+ CellLabel->"Out[5]=",ExpressionUUID->"a89cfa46-4b41-4f6c-83e6-8404362b4eff"],
+
+Cell[BoxData[\
+"12949568966581240850606003096810963088718782408149632706991303274394343514876\
+832830631134634636018005345110636655823825172560809897965647770564083245862127\
+555054166475040297473152596656641710048570391338183023677231570565857281605746\
+747872115056444441732458603339269101212989292296925686364057293240492657357251\
+241799926186391926328549797453092568783239145806552007944221554799312799478428\
+933598614630943659948015129579443100788396632934279535550488035862127977075467\
+925636454098383564687880741042300832142685158967112688780075775245677183657075\
+580970397040291737397648784191424270821080852660396798833519128515233320"], \
+"Output",
+ CellChangeTimes->{{3.7069586423008957`*^9, 3.7069586650559435`*^9}},
+ CellLabel->"Out[6]=",ExpressionUUID->"4a195363-bd2f-41a0-90a9-8aa9641ad924"]
+}, Open  ]],
+
+Cell["\<\
+
+3) Choose 2 numbers e and d such that ed = 1(mod t). Discard t after this. We \
+should just be careful that e isn\[CloseCurlyQuote]t a divisor of n and it \
+should be between 1 and n\
+\>", "Text",
+ CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
+   3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
+   3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, 
+   3.7069585126090784`*^9, {3.7069585673514023`*^9, 3.706958579254223*^9}, {
+   3.7069587363281784`*^9, 3.706958741665388*^9}, {3.7069591129235954`*^9, 
+   3.7069591533822346`*^9}},ExpressionUUID->"838376e0-7ccc-4b30-a842-\
+f01af48cf8b6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"e", " ", "=", " ", 
+  RowBox[{"RandomPrime", "[", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "n"}], "}"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
+   3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
+   3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, 
+   3.7069585126090784`*^9, {3.7069585673514023`*^9, 3.706958579254223*^9}, {
+   3.7069587363281784`*^9, 3.706958770771056*^9}, {3.7069592773969655`*^9, 
+   3.7069593045865374`*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"236db247-22ae-4a92-8a93-9ee1d7ff9aef"],
+
+Cell[BoxData[\
+"12452372056670183279634062655704004908345538639636617073989173324554156080887\
+364070186038264493456199469475892256846173919572444008956376109262888481227502\
+657573347765827075254336485218163278035910857309932917344808217371737099750045\
+905546319477387370651196415282361432091318361309480082052966385152927831830129\
+212624251221036678302384607951935923550534499963703747633463830887535185656517\
+748115129496815583115097240382683836119902581726706901212339886571705837992965\
+280968334097053260093135778040905272621163255906833536394645805435564996628031\
+857527472124822129674748733306903370341748864640888957090444857694029011"], \
+"Output",
+ CellChangeTimes->{
+  3.7069587715978575`*^9, {3.706959293489116*^9, 3.706959306942142*^9}},
+ CellLabel->"Out[9]=",ExpressionUUID->"83fe579c-0ed1-48b5-9ce8-67baa8ec4037"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"d", " ", "=", " ", 
+  RowBox[{"PowerMod", "[", 
+   RowBox[{"e", ",", " ", 
+    RowBox[{"-", "1"}], ",", " ", "t"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.706959449991121*^9, 3.706959459122137*^9}, {
+  3.7069595263876653`*^9, 3.7069595554254293`*^9}, {3.706959765280192*^9, 
+  3.706959782863634*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"61f5c4fc-d414-4f37-bb19-873cc9d307a8"],
+
+Cell[BoxData[\
+"61152984421935676129287835667779306942828657312902903776774521319131798782504\
+366385897799916168910758484916092678316965070025903468589673951163643994135699\
+322984491110800774205858766286925459237443817371516747712309530733896031179839\
+981868532691972336520439892939888394924814435113184458385865729764605310885365\
+691716964709746604474580990027203216138458891084152986365701712501186070590988\
+204931653430422406834062803552175537909767483973701183548708521101047883729659\
+143652839349608487056917407015230365785985011914962306350343617013726273470196\
+0170774016368365691771281021746990529125150580531987505910802899125931"], \
+"Output",
+ CellChangeTimes->{3.70695955622103*^9, 3.706959783396035*^9},
+ CellLabel->"Out[12]=",ExpressionUUID->"48b861f7-4eaf-4622-aa04-e8999f10e5ee"]
+}, Open  ]],
+
+Cell["\<\
+
+ 
+4) Now, the couple (e, n) is called the public key(n is called the modulus \
+and e is called the exponent) and the private key is d
+5) The public key can be given to others but the private key (d) should not \
+leave the computer.
+6) For a secure enough implementation the modules n has at least 2048 bits. I \
+used much smaller numbers here though\
+\>", "Text",
+ CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
+   3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
+   3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, 
+   3.7069585126090784`*^9, {3.7069585673514023`*^9, 3.706958579254223*^9}, 
+   3.7069587363281784`*^9, {3.7069598456572275`*^9, 
+   3.706959860553056*^9}},ExpressionUUID->"a8e357bf-aeeb-41b4-81cd-\
+0ecf1dbd3cc1"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Encryption", "Section",
+ CellChangeTimes->{{3.70510464885445*^9, 3.7051046548567934`*^9}, {
+  3.7051046932679906`*^9, 3.7051047014174566`*^9}, {3.705686116931855*^9, 
+  3.7056861543411007`*^9}, {3.7069177434308133`*^9, 3.706917755809885*^9}, {
+  3.7069563195040035`*^9, 
+  3.706956323996812*^9}},ExpressionUUID->"20c1d3cf-2a8e-4fff-b468-\
+9d0d5b1ff522"],
+
+Cell["\<\
+Let\[CloseCurlyQuote]s say the message to be encrypted can be represented as \
+an integer m which is smaller than n. If the integer representation is larger \
+than n, then the message has to be broken down into multiple pieces. m should \
+also be prime to n. 
+
+Now, to encrypt the message m and get the ciphertext c(another integer) we \
+compute c = m^e(mod n). \
+\>", "Text",
+ CellChangeTimes->{{3.706956960190529*^9, 3.7069570858015795`*^9}, {
+  3.706957176484543*^9, 3.706957248015074*^9}, {3.70696128493291*^9, 
+  3.706961299369336*^9}},ExpressionUUID->"4181f59d-90c6-46ed-a192-\
+02f850fef7c3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"m", " ", "=", " ", "7777777777"}], "\[IndentingNewLine]", 
+ RowBox[{"c", " ", "=", 
+  RowBox[{"PowerMod", "[", 
+   RowBox[{"m", ",", "e", ",", "n"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.7069598739788814`*^9, 3.706959888040308*^9}, {
+  3.7069599215614104`*^9, 3.7069599428556504`*^9}, {3.706960106000182*^9, 
+  3.706960114457599*^9}},
+ CellLabel->"In[15]:=",ExpressionUUID->"d8f8fc35-df15-4bdb-9fa2-ddfdbff2b066"],
+
+Cell[BoxData["7777777777"], "Output",
+ CellChangeTimes->{3.706959944259653*^9, 3.7069601646680555`*^9},
+ CellLabel->"Out[15]=",ExpressionUUID->"9fb4b0d0-2982-4476-92a3-2bbbce7816a7"],
+
+Cell[BoxData[\
+"53084873597462982586357214552862633370427836469380057989766000305424207857036\
+848327261368346581472087843373259559696033191392953916272917774418692918372075\
+025016410961266105536508106313563886885082350169250825293980462702693543568326\
+487020390448254468585124227781303718389151658627771888923823588469271288080447\
+802592242958788097596070114957439296314424377827104465941125227103050694179036\
+419038438745490781160060403832148777416984249626966493370008509556704529428524\
+436652032178933420342047628030025786032644217485251426842853518645167818192266\
+59158607662618082260433320066690573635191884493793458954686497519228658"], \
+"Output",
+ CellChangeTimes->{3.706959944259653*^9, 3.7069601646836557`*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"4e0cab85-159d-40f6-9d20-3c5fb0be7285"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Decryption", "Section",
+ CellChangeTimes->{{3.70510464885445*^9, 3.7051046548567934`*^9}, {
+  3.7051046932679906`*^9, 3.7051047014174566`*^9}, {3.705686116931855*^9, 
+  3.7056861543411007`*^9}, {3.7069177434308133`*^9, 3.706917755809885*^9}, {
+  3.7069563256036143`*^9, 3.7069563284584193`*^9}, {3.7069567453507023`*^9, 
+  3.706956746692304*^9}},ExpressionUUID->"dc7d90b6-626f-4099-8f8c-\
+1af819b41585"],
+
+Cell["\<\
+We now have the ciphertext c and we can retrieve the original message m by \
+computing: c^d = m(mod n)
+This is true because c^d = m^ed
+\t\t\t       = m^[1+k(p-1)(q-1)]
+\t\t\t       = m.m^[k(p-1)(q-1)]
+\t\t\t       = m.(m^[(p-1)(q-1)]^k
+\t\t\t       = m.1
+\t\t\t       =m
+So, basically we calculate m = c^d (mod n)\
+\>", "Text",
+ CellChangeTimes->{{3.706957261483898*^9, 3.706957312960191*^9}, {
+  3.706957401384681*^9, 3.706957545437554*^9}, {3.706960266591346*^9, 
+  3.706960267745748*^9}, {3.706961201070357*^9, 
+  3.7069612228895965`*^9}},ExpressionUUID->"5e8cec69-680d-4cf6-a14b-\
+a38feb6cbd3c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"finalmessage", " ", "=", " ", 
+  RowBox[{"PowerMod", "[", 
+   RowBox[{"c", ",", "d", ",", "n"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.706960192786*^9, 3.706960243254899*^9}},
+ CellLabel->"In[18]:=",ExpressionUUID->"785323cf-1083-49de-9517-2370ab7fac28"],
+
+Cell[BoxData["7777777777"], "Output",
+ CellChangeTimes->{{3.7069602334720783`*^9, 3.7069602438945*^9}},
+ CellLabel->"Out[18]=",ExpressionUUID->"ac1f3279-3903-47f4-b5a5-3bba266abd14"]
+}, Open  ]],
+
+Cell["We can see that the finalmessage variable is same as m.", "Text",
+ CellChangeTimes->{{3.7069602497647142`*^9, 3.706960259146331*^9}, {
+   3.706961185224928*^9, 3.706961186270129*^9}, 
+   3.7069612576844597`*^9},ExpressionUUID->"6fd332d0-1e57-458d-bf40-\
+2476ff66951b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Why is it secure ?", "Section",
+ CellChangeTimes->{{3.70510464885445*^9, 3.7051046548567934`*^9}, {
+  3.7051046932679906`*^9, 3.7051047014174566`*^9}, {3.705686116931855*^9, 
+  3.7056861543411007`*^9}, {3.7069177434308133`*^9, 3.706917755809885*^9}, {
+  3.7069563325792274`*^9, 
+  3.706956335652433*^9}},ExpressionUUID->"33b736ac-ea26-48b4-ac58-\
+6a15bec96fd4"],
+
+Cell["\<\
+Lets say someone intercepting in between has the ciphertext c and the public \
+key. The eavesdropper also has to know t = (p-1)(q-1) which means he has to \
+find p and q. They only info the person has is that n = (pq)\tor in other \
+words, he has to factor the big integer n into two primes p and q which is \
+supposed to be quite difficult and time consuming. There are no known \
+algorithms which do this in acceptable time and computing power.  \
+\>", "Text",
+ CellChangeTimes->{{3.7069575614686146`*^9, 
+  3.7069577597805786`*^9}},ExpressionUUID->"59a2973a-cebc-445b-acc3-\
+80d370e65a2c"],
+
+Cell[BoxData[
+ RowBox[{"FactorInteger", "[", "n", "]"}]], "Input",
+ CellChangeTimes->{{3.7069603014162436`*^9, 3.7069603060212555`*^9}},
+ CellLabel->"In[19]:=",ExpressionUUID->"56b12dca-c953-4117-9d0e-1b4f56d0aaf2"],
+
+Cell["\<\
+As you see, the above functions takes really long(doesn\[CloseCurlyQuote]t \
+finish) and this problem is computationally difficult. \
+\>", "Text",
+ CellChangeTimes->{{3.7069603157876787`*^9, 3.7069603381717224`*^9}, {
+  3.7069611746869087`*^9, 
+  3.706961178961316*^9}},ExpressionUUID->"dd52a3ae-07bd-4ded-82b1-\
+4f6389524e78"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Authorship information", "AuthorshipSection",
+ CellChangeTimes->{{3.705105762145127*^9, 3.7051057665253773`*^9}, {
+  3.706957419378914*^9, 
+  3.706957419612914*^9}},ExpressionUUID->"c0fd05a1-5b55-4df1-a9ee-\
+a16d24aaeb54"],
+
+Cell["Nikhil. R", "Authorship",
+ CellChangeTimes->{{3.7051057700535793`*^9, 3.7051057808261957`*^9}, {
+  3.7069555937117033`*^9, 
+  3.7069555949129057`*^9}},ExpressionUUID->"e005ba7c-ac28-4914-8b74-\
+c7361d1d6986"],
+
+Cell["20-6-2017", "Authorship",
+ CellChangeTimes->{{3.705105786521521*^9, 3.7051057998362827`*^9}, {
+  3.706955605714125*^9, 
+  3.706955610084133*^9}},ExpressionUUID->"204cf9aa-0554-447e-ab44-\
+c0c302a1d7d0"],
+
+Cell["rnikhil275@gmail.com", "Authorship",
+ CellChangeTimes->{{3.7051058070526953`*^9, 3.705105841815684*^9}, {
+  3.706955618527748*^9, 
+  3.706955626209962*^9}},ExpressionUUID->"0fa2f1b8-91c0-4fcd-a046-\
+789938ac6a79"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{952, 972},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+DockedCells->Cell[
+  BoxData[
+   TagBox[
+    GridBox[{{
+       ItemBox["\"\"", ItemSize -> 0.2, StripOnInput -> False], 
+       DynamicModuleBox[{}, 
+        ActionMenuBox[
+        "\"Insert\"", {
+         "\"Section\"" :> 
+          Module[{$CellContext`nb = ButtonNotebook[]}, 
+            Exploration`MoveCursorAfterCellPosition[$CellContext`nb]; 
+            NotebookWrite[$CellContext`nb, 
+              Cell[
+               CellGroupData[{
+                 Cell["XXXX", "Section"], 
+                 Cell["XXXX", "Text"], 
+                 Cell["XXXX", "Direction"], 
+                 Cell[
+                  BoxData["XXXX"], "Input"]}, Open]], All]; 
+            SelectionMove[$CellContext`nb, Before, Cell]; 
+            SelectionMove[$CellContext`nb, Next, Cell]; 
+            SelectionMove[$CellContext`nb, All, CellContents]], Delimiter, 
+          "\"Text\"" :> 
+          Module[{$CellContext`nb = ButtonNotebook[]}, 
+            Exploration`MoveCursorAfterCellPosition[$CellContext`nb]; 
+            NotebookWrite[$CellContext`nb, 
+              Cell["XXXX", "Text"], All]; 
+            SelectionMove[$CellContext`nb, All, CellContents]], 
+          "\"Direction\"" :> 
+          Module[{$CellContext`nb = ButtonNotebook[]}, 
+            Exploration`MoveCursorAfterCellPosition[$CellContext`nb]; 
+            NotebookWrite[$CellContext`nb, 
+              Cell["XXXX", "Direction"], All]; 
+            SelectionMove[$CellContext`nb, All, CellContents]], 
+          "\"Further Exploration\"" :> 
+          Module[{$CellContext`nb = ButtonNotebook[]}, 
+            Exploration`MoveCursorAfterCellPosition[$CellContext`nb]; 
+            NotebookWrite[$CellContext`nb, 
+              Cell["XXXX", "FurtherExploration"], All]; 
+            SelectionMove[$CellContext`nb, All, CellContents]]}, Method -> 
+         "Queued", Appearance -> "PopupMenu", FrameMargins -> 2.4], 
+        Initialization :> (Exploration`MoveCursorAfterCellPosition[
+           Pattern[$CellContext`nb, 
+            Blank[]]] := Which[
+           MatchQ[
+            Developer`CellInformation[$CellContext`nb], {
+             Repeated[{
+               BlankSequence[], "CursorPosition" -> "CellBracket", 
+               BlankSequence[]}]}], 
+           SelectionMove[$CellContext`nb, After, Cell], 
+           Developer`CellInformation[$CellContext`nb] =!= $Failed, 
+           Module[{$CellContext`lnkre}, 
+             While[(LinkWrite[$ParentLink, 
+                 
+                 FrontEnd`CellInformation[$CellContext`nb]]; \
+$CellContext`lnkre = LinkRead[$ParentLink]); 
+              And[$CellContext`lnkre =!= $Failed, 
+                Not[
+                 MemberQ[
+                  ReplaceAll["CursorPosition", $CellContext`lnkre], 
+                  "CellBracket"]]], 
+              FrontEndExecute[
+               
+               FrontEnd`SelectionMove[$CellContext`nb, All, Cell, AutoScroll -> 
+                False]]]]; SelectionMove[$CellContext`nb, After, Cell]]), 
+        DynamicModuleValues :> {}], 
+       ItemBox["\"\"", ItemSize -> Fit, StripOnInput -> False], 
+       ButtonBox["\"Sample\"", ButtonFunction :> NotebookOpen[
+          
+          FileNameJoin[{$UserBaseDirectory, "Applications", 
+            "SummerSchoolTemplates", "FrontEnd", "TextResources", 
+            "TopicExplorationExample.nb"}]], Appearance -> Automatic, 
+        Evaluator -> Automatic, Method -> "Queued"]}}, AutoDelete -> False, 
+     GridBoxItemSize -> {
+      "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], "Grid"]], 
+  "DockedCell"],
+CellLabelAutoDelete->False,
+Magnification:>1.5 Inherited,
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]], 
+   Cell[
+    StyleData["Title"], FontFamily -> "Source Sans Pro", FontTracking -> -0.8,
+     FontColor -> RGBColor[0.65, 0, 0]], 
+   Cell[
+    StyleData["Abstract", StyleDefinitions -> StyleData["Text"]], FontSize -> 
+    16, FontSlant -> "Italic", FontColor -> GrayLevel[0.4]], 
+   Cell[
+    StyleData["Section"], CellFrame -> False, FontFamily -> "Source Sans Pro",
+     FontTracking -> -0.5, $CellContext`ReturnCreatesNewCell -> 
+    True, $CellContext`DefaultReturnCreatedCellStyle -> "Text"], 
+   Cell[
+    StyleData["FurtherExplorationSection"], 
+    CellMargins -> {{28, Inherited}, {6, 24}}, 
+    CellGroupingRules -> {"SectionGrouping", 30}, DefaultNewCellStyle -> 
+    "FurtherExploration", FontFamily -> "Source Sans Pro Semibold", FontSize -> 
+    22, FontColor -> GrayLevel[0.35]], 
+   Cell[
+    StyleData["FurtherExploration", StyleDefinitions -> StyleData["Text"]], 
+    CellMargins -> {{66, 10}, {5, 5}}, FontSize -> 14, FontWeight -> "Bold", 
+    FontColor -> GrayLevel[0.5], $CellContext`ReturnCreatesNewCell -> True], 
+   Cell[
+    StyleData["AuthorshipSection"], CellMargins -> {{28, Inherited}, {6, 24}},
+     CellGroupingRules -> {"SectionGrouping", 30}, DefaultNewCellStyle -> 
+    "FurtherExploration", FontFamily -> "Source Sans Pro Semibold", FontSize -> 
+    22, FontColor -> GrayLevel[0.35]], 
+   Cell[
+    StyleData["Authorship", StyleDefinitions -> StyleData["Text"]], 
+    CellMargins -> {{66, 10}, {4, 4}}, FontSize -> 14, FontColor -> 
+    GrayLevel[0.5], $CellContext`ReturnCreatesNewCell -> True], 
+   Cell[
+    StyleData["Text"], DefaultNewCellStyle -> 
+    "Direction", $CellContext`ReturnCreatesNewCell -> 
+    True, $CellContext`DefaultReturnCreatedCellStyle -> "Direction"], 
+   Cell[
+    StyleData["Direction", StyleDefinitions -> StyleData["Text"]], 
+    CellDingbat -> 
+    StyleBox["\[FilledSmallSquare]", FontColor -> GrayLevel[0.7]], 
+    CellMargins -> {{78, 10}, {6, 7}}, CellFrameLabelMargins -> 4, 
+    MenuSortingValue -> 10000, MenuCommandKey -> "8", FontSize -> 14, 
+    FontWeight -> "Plain", FontColor -> 
+    GrayLevel[0.4], $CellContext`DefaultReturnCreatedCellStyle -> "Input"], 
+   Cell[
+    StyleData["Code"], MenuCommandKey -> None]}, Visible -> False, 
+  FrontEndVersion -> "11.1 for Microsoft Windows (64-bit) (April 18, 2017)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 295, 5, 143, "Title", "ExpressionUUID" -> \
+"b5650962-d093-42c5-bc9d-c7baf07c42c0"],
+Cell[878, 29, 329, 5, 50, "Abstract", "ExpressionUUID" -> \
+"0ebf692a-29c7-49a1-b6a5-c74619e72377"],
+Cell[CellGroupData[{
+Cell[1232, 38, 309, 5, 91, "Section", "ExpressionUUID" -> \
+"ad6db0f2-1428-4f79-b2db-f73f6f49cf33"],
+Cell[1544, 45, 1046, 16, 246, "Text", "ExpressionUUID" -> \
+"6506b4c3-6649-44c0-8d22-1c0360567133"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2627, 66, 307, 5, 91, "Section", "ExpressionUUID" -> \
+"c545fb8f-a78e-4810-8c42-d3baf52498e9"],
+Cell[2937, 73, 832, 20, 134, "Text", "ExpressionUUID" -> \
+"42496358-5f82-4a09-9353-4e99690d45e8"],
+Cell[CellGroupData[{
+Cell[3794, 97, 412, 11, 46, "Input", "ExpressionUUID" -> \
+"565eb0d2-2d13-4a77-b2fe-ae8320176a12"],
+Cell[4209, 110, 851, 13, 366, "Output", "ExpressionUUID" -> \
+"af1f07cf-79b4-4fdb-bccf-e9003a33c95c"]
+}, Open  ]],
+Cell[5075, 126, 477, 10, 103, "Text", "ExpressionUUID" -> \
+"daf99bdd-5a22-4d21-9761-16976696b110"],
+Cell[CellGroupData[{
+Cell[5577, 140, 678, 14, 105, "Code", "ExpressionUUID" -> \
+"4ff926cc-9de3-4fb3-aa57-b5d27cdeca42"],
+Cell[6258, 156, 810, 11, 337, "Output", "ExpressionUUID" -> \
+"a89cfa46-4b41-4f6c-83e6-8404362b4eff"],
+Cell[7071, 169, 810, 11, 337, "Output", "ExpressionUUID" -> \
+"4a195363-bd2f-41a0-90a9-8aa9641ad924"]
+}, Open  ]],
+Cell[7896, 183, 666, 12, 103, "Text", "ExpressionUUID" -> \
+"838376e0-7ccc-4b30-a842-f01af48cf8b6"],
+Cell[CellGroupData[{
+Cell[8587, 199, 625, 11, 76, "Code", "ExpressionUUID" -> \
+"236db247-22ae-4a92-8a93-9ee1d7ff9aef"],
+Cell[9215, 212, 833, 12, 337, "Output", "ExpressionUUID" -> \
+"83fe579c-0ed1-48b5-9ce8-67baa8ec4037"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10085, 229, 404, 8, 76, "Code", "ExpressionUUID" -> \
+"61f5c4fc-d414-4f37-bb19-873cc9d307a8"],
+Cell[10492, 239, 802, 11, 337, "Output", "ExpressionUUID" -> \
+"48b861f7-4eaf-4622-aa04-e8999f10e5ee"]
+}, Open  ]],
+Cell[11309, 253, 807, 16, 246, "Text", "ExpressionUUID" -> \
+"a8e357bf-aeeb-41b4-81cd-0ecf1dbd3cc1"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12153, 274, 359, 6, 91, "Section", "ExpressionUUID" -> \
+"20c1d3cf-2a8e-4fff-b468-9d0d5b1ff522"],
+Cell[12515, 282, 608, 12, 189, "Text", "ExpressionUUID" -> \
+"4181f59d-90c6-46ed-a192-02f850fef7c3"],
+Cell[CellGroupData[{
+Cell[13148, 298, 443, 8, 76, "Input", "ExpressionUUID" -> \
+"d8f8fc35-df15-4bdb-9fa2-ddfdbff2b066"],
+Cell[13594, 308, 182, 2, 46, "Output", "ExpressionUUID" -> \
+"9fb4b0d0-2982-4476-92a3-2bbbce7816a7"],
+Cell[13779, 312, 806, 11, 337, "Output", "ExpressionUUID" -> \
+"4e0cab85-159d-40f6-9d20-3c5fb0be7285"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14634, 329, 409, 6, 91, "Section", "ExpressionUUID" -> \
+"dc7d90b6-626f-4099-8f8c-1af819b41585"],
+Cell[15046, 337, 609, 15, 274, "Text", "ExpressionUUID" -> \
+"5e8cec69-680d-4cf6-a14b-a38feb6cbd3c"],
+Cell[CellGroupData[{
+Cell[15680, 356, 281, 5, 46, "Input", "ExpressionUUID" -> \
+"785323cf-1083-49de-9517-2370ab7fac28"],
+Cell[15964, 363, 182, 2, 46, "Output", "ExpressionUUID" -> \
+"ac1f3279-3903-47f4-b5a5-3bba266abd14"]
+}, Open  ]],
+Cell[16161, 368, 274, 4, 46, "Text", "ExpressionUUID" -> \
+"6fd332d0-1e57-458d-bf40-2476ff66951b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16472, 377, 367, 6, 91, "Section", "ExpressionUUID" -> \
+"33b736ac-ea26-48b4-ac58-6a15bec96fd4"],
+Cell[16842, 385, 602, 10, 189, "Text", "ExpressionUUID" -> \
+"59a2973a-cebc-445b-acc3-80d370e65a2c"],
+Cell[17447, 397, 215, 3, 46, "Input", "ExpressionUUID" -> \
+"56b12dca-c953-4117-9d0e-1b4f56d0aaf2"],
+Cell[17665, 402, 337, 7, 75, "Text", "ExpressionUUID" -> \
+"dd52a3ae-07bd-4ded-82b1-4f6389524e78"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18039, 414, 228, 4, 86, "AuthorshipSection", "ExpressionUUID" -> \
+"c0fd05a1-5b55-4df1-a9ee-a16d24aaeb54"],
+Cell[18270, 420, 214, 4, 36, "Authorship", "ExpressionUUID" -> \
+"e005ba7c-ac28-4914-8b74-c7361d1d6986"],
+Cell[18487, 426, 208, 4, 36, "Authorship", "ExpressionUUID" -> \
+"204cf9aa-0554-447e-ab44-c0c302a1d7d0"],
+Cell[18698, 432, 219, 4, 36, "Authorship", "ExpressionUUID" -> \
+"0fa2f1b8-91c0-4fcd-a046-789938ac6a79"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
