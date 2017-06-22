@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     35506,        858]
-NotebookOptionsPosition[     25087,        621]
-NotebookOutlinePosition[     31429,        761]
-CellTagsIndexPosition[     31386,        758]
+NotebookDataLength[     38304,        945]
+NotebookOptionsPosition[     27879,        708]
+NotebookOutlinePosition[     34223,        848]
+CellTagsIndexPosition[     34180,        845]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -72,8 +72,84 @@ Cell["Algorithm", "Section",
 d3baf52498e9"],
 
 Cell[TextData[{
- "The idea of the algorithm is to encrypt some message between two users. \n\n\
-1) First, each user chooses two big primes ",
+ "The idea of the algorithm is to encrypt some message between two users. \
+Fermat\[CloseCurlyQuote]s little theorem says that, given a prime ",
+ Cell[BoxData[
+  FormBox["p", TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "0cc06bf7-3713-4595-a3fe-9442304f7d3c"],
+ " and any integer ",
+ Cell[BoxData[
+  FormBox["a", TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "fd62c53a-cf76-47ae-aa42-d091762d6731"],
+ ", ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["a", 
+    RowBox[{"p", "-", "1"}]], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "4d670316-8a61-4875-bed0-2be0c550d3f7"],
+ " = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", 
+    RowBox[{"(", 
+     RowBox[{"mod", " ", "p"}], ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "f22069ee-4b00-4eb2-b4fa-122045e0356e"],
+ ",\nthen ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["a", "p"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "70c16b97-1617-43f6-b1b0-1dd024f36cff"],
+ " =",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{" ", 
+    RowBox[{"a", " ", 
+     RowBox[{"(", 
+      RowBox[{"mod", " ", "p"}], ")"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "3899ec7f-e40a-4ad0-9bbf-a3b7cae4c557"],
+ ". This generalizes for any integer n coprime to a and we get ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["a", "t"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "ac6bf2ff-4801-400f-b552-cb7a57019d0f"],
+ " = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", " ", 
+    RowBox[{"(", 
+     RowBox[{"mod", " ", "n"}], ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "07b09310-332f-4676-a09f-a80bae8c54ad"],
+ " ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"=", ">"}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "cecc87eb-cb04-4126-b361-6e41895171fc"],
+ " ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["a", 
+    RowBox[{"t", "+", "1"}]], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "e001a4f8-3083-4838-868c-1ab9f38afffe"],
+ " = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"a", " ", 
+    RowBox[{"(", 
+     RowBox[{"mod", " ", "n"}], ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "dfac6de2-5162-4170-a91b-0a7939c8469f"],
+ ". Proof is omitted here for brevity. \n\n1) First, each user chooses two \
+big primes ",
  StyleBox["p", "Code"],
  " and ",
  StyleBox["q", "Code"],
@@ -89,8 +165,10 @@ Cell[TextData[{
    3.706956472588721*^9, 3.706956660818462*^9}, {3.706956699381658*^9, 
    3.7069569559317217`*^9}, {3.706958419911875*^9, 3.7069584515409718`*^9}, {
    3.706958506665468*^9, 3.706958514278281*^9}, {3.706958598832361*^9, 
-   3.706958613743233*^9}, 
-   3.7069612723512874`*^9},ExpressionUUID->"42496358-5f82-4a09-9353-\
+   3.706958613743233*^9}, 3.7069612723512874`*^9, {3.707131921074663*^9, 
+   3.70713206789616*^9}, {3.707132104231029*^9, 3.7071322989321885`*^9}, {
+   3.707132344081276*^9, 
+   3.707132344081276*^9}},ExpressionUUID->"42496358-5f82-4a09-9353-\
 4e99690d45e8"],
 
 Cell[CellGroupData[{
@@ -105,7 +183,8 @@ Cell[BoxData[
      RowBox[{
       RowBox[{"2", "^", "1023"}], ",", 
       RowBox[{"2", "^", "1024"}]}], "}"}], ",", "2"}], "]"}]}]], "Input",
- CellChangeTimes->{{3.706958518115888*^9, 3.70695854118935*^9}},
+ CellChangeTimes->{{3.706958518115888*^9, 3.70695854118935*^9}, 
+   3.707131181243968*^9},
  CellLabel->"In[17]:=",ExpressionUUID->"565eb0d2-2d13-4a77-b2fe-ae8320176a12"],
 
 Cell[BoxData[
@@ -213,34 +292,33 @@ Cell[BoxData[\
 Cell[TextData[{
  "\n3) Choose 2 numbers ",
  Cell[BoxData[
-  FormBox["e", TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+  FormBox["e", TraditionalForm]],ExpressionUUID->
   "cca956aa-9a30-4fe7-8805-e4004c792c1c"],
  " and ",
  Cell[BoxData[
-  FormBox["d", TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+  FormBox["d", TraditionalForm]],ExpressionUUID->
   "d85bf6ec-b0ef-443c-8384-fed8c447d7b7"],
  " such that ",
  Cell[BoxData[
   FormBox[
    RowBox[{
-    RowBox[{"e", "*", "d"}], " ", "=", " ", 
-    RowBox[{"1", 
-     RowBox[{"(", 
-      RowBox[{"mod", " ", "t"}], ")"}]}]}], TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
-  "44d958cc-05ce-4b57-84ff-5ff10e9b64cd"],
+    RowBox[{"e", "*", "d"}], " ", "=", " ", Cell[TextData[Cell[BoxData[
+     FormBox[
+      RowBox[{"1", 
+       RowBox[{"(", 
+        RowBox[{"mod", " ", "t"}], ")"}]}], TraditionalForm]],
+     FormatType->"TraditionalForm",ExpressionUUID->
+     "4b74fbc3-23aa-4fa7-aa68-a2ec515269d1"]],ExpressionUUID->
+     "024793aa-9bdc-4396-b27d-d0b14210ef7d"]}], TraditionalForm]],
+  ExpressionUUID->"44d958cc-05ce-4b57-84ff-5ff10e9b64cd"],
  ". Discard t after this. We should just be careful that e isn\
 \[CloseCurlyQuote]t a divisor of ",
  Cell[BoxData[
-  FormBox["n", TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+  FormBox["n", TraditionalForm]],ExpressionUUID->
   "c8bfae68-b1e4-46eb-abe8-a4859f0c199d"],
  " and it should be between 1 and ",
  Cell[BoxData[
-  FormBox["n", TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+  FormBox["n", TraditionalForm]],ExpressionUUID->
   "e6309a97-f223-426c-bd57-85839541828c"]
 }], "Text",
  CellChangeTimes->{{3.7069563465204535`*^9, 3.7069563495176587`*^9}, {
@@ -250,7 +328,8 @@ Cell[TextData[{
    3.7069587363281784`*^9, 3.706958741665388*^9}, {3.7069591129235954`*^9, 
    3.7069591533822346`*^9}, {3.7070593182778816`*^9, 
    3.7070593286070995`*^9}, {3.7070593784035897`*^9, 
-   3.7070593784035897`*^9}},ExpressionUUID->"838376e0-7ccc-4b30-a842-\
+   3.7070593784035897`*^9}, {3.7071323141608152`*^9, 
+   3.707132314566416*^9}},ExpressionUUID->"838376e0-7ccc-4b30-a842-\
 f01af48cf8b6"],
 
 Cell[CellGroupData[{
@@ -426,17 +505,29 @@ Cell["Decryption", "Section",
 
 Cell[TextData[{
  "We now have the ciphertext c and we can retrieve the original message m by \
-computing: c^d = m(mod n)\nThis is true because ",
+computing: ",
  Cell[BoxData[
   FormBox[
    SuperscriptBox["c", "d"], TraditionalForm]],
   FormatType->"TraditionalForm",ExpressionUUID->
+  "d830dcc9-2b52-437c-9fbd-07760825e2f6"],
+ " = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"m", 
+    RowBox[{"(", 
+     RowBox[{"mod", " ", "n"}], ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "2108198d-02c7-4dc1-9645-7e0619afcd7e"],
+ "\nThis is true because ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["c", "d"], TraditionalForm]],ExpressionUUID->
   "b9104970-8808-40db-8d3e-284c7a978d3d"],
  " = ",
  Cell[BoxData[
   FormBox[
-   SuperscriptBox["m", "ed"], TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+   SuperscriptBox["m", "ed"], TraditionalForm]],ExpressionUUID->
   "5eeedbe8-fce1-4178-a7db-508fd3041f3d"],
  "\n\t\t\t       = ",
  Cell[BoxData[
@@ -460,8 +551,7 @@ computing: c^d = m(mod n)\nThis is true because ",
         RowBox[{"p", "-", "1"}], ")"}], 
        RowBox[{"(", 
         RowBox[{"q", "-", "1"}], ")"}]}], "]"}]]}], TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
-  "c8c3d723-b5ec-49d3-97ed-b83b4036e8cb"],
+  ExpressionUUID->"c8c3d723-b5ec-49d3-97ed-b83b4036e8cb"],
  "\n\t\t\t       = ",
  Cell[BoxData[
   FormBox[
@@ -474,24 +564,20 @@ computing: c^d = m(mod n)\nThis is true because ",
        SuperscriptBox[
         RowBox[{"(", 
          RowBox[{"q", "-", "1"}], ")"}], "k"]}], "]"}]]}], TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
-  "16b45c58-905f-40ba-b8b8-0181b6d8702d"],
+  ExpressionUUID->"16b45c58-905f-40ba-b8b8-0181b6d8702d"],
  "\n\t\t\t       = ",
  Cell[BoxData[
   FormBox[
-   RowBox[{"m", ".1"}], TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+   RowBox[{"m", ".1"}], TraditionalForm]],ExpressionUUID->
   "8ab3fa7c-e01c-4719-984a-97f51053fd7c"],
  "\n\t\t\t       = ",
  Cell[BoxData[
-  FormBox["m", TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+  FormBox["m", TraditionalForm]],ExpressionUUID->
   "ecd126ee-6409-4277-b004-21895a78a909"],
  "\nSo, basically we calculate m = ",
  Cell[BoxData[
   FormBox[
-   SuperscriptBox["c", "d"], TraditionalForm]],
-  FormatType->"TraditionalForm",ExpressionUUID->
+   SuperscriptBox["c", "d"], TraditionalForm]],ExpressionUUID->
   "c295a0ad-8417-40fc-9c42-21f6012e8e52"],
  "(mod n)"
 }], "Text",
@@ -500,7 +586,8 @@ computing: c^d = m(mod n)\nThis is true because ",
    3.706960267745748*^9}, {3.706961201070357*^9, 3.7069612228895965`*^9}, {
    3.707003182640561*^9, 3.7070031828372498`*^9}, 3.707059019655551*^9, {
    3.70705908833758*^9, 3.7070592366014605`*^9}, {3.7070593891384087`*^9, 
-   3.7070593974084234`*^9}},ExpressionUUID->"5e8cec69-680d-4cf6-a14b-\
+   3.7070593974084234`*^9}, {3.707131161255531*^9, 
+   3.7071311703219485`*^9}},ExpressionUUID->"5e8cec69-680d-4cf6-a14b-\
 a38feb6cbd3c"],
 
 Cell[BoxData[""], "Input",
@@ -619,8 +706,8 @@ Cell["rnikhil275@gmail.com", "Authorship",
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1680, 936},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{1920, 980},
+WindowMargins->{{-4, Automatic}, {Automatic, -4}},
 DockedCells->Cell[
   BoxData[
    TagBox[
@@ -774,89 +861,89 @@ Cell[1544, 45, 1046, 16, 132, "Text", "ExpressionUUID" -> \
 Cell[CellGroupData[{
 Cell[2627, 66, 307, 5, 91, "Section", "ExpressionUUID" -> \
 "c545fb8f-a78e-4810-8c42-d3baf52498e9"],
-Cell[2937, 73, 832, 20, 134, "Text", "ExpressionUUID" -> \
+Cell[2937, 73, 3285, 98, 167, "Text", "ExpressionUUID" -> \
 "42496358-5f82-4a09-9353-4e99690d45e8"],
 Cell[CellGroupData[{
-Cell[3794, 97, 413, 11, 46, "Input", "ExpressionUUID" -> \
+Cell[6247, 175, 439, 12, 46, "Input", "ExpressionUUID" -> \
 "565eb0d2-2d13-4a77-b2fe-ae8320176a12"],
-Cell[4210, 110, 879, 14, 192, "Output", "ExpressionUUID" -> \
+Cell[6689, 189, 879, 14, 192, "Output", "ExpressionUUID" -> \
 "be723351-db4c-428a-9fb2-5e749beb688f"]
 }, Open  ]],
-Cell[5104, 127, 1333, 36, 75, "Text", "ExpressionUUID" -> \
+Cell[7583, 206, 1333, 36, 75, "Text", "ExpressionUUID" -> \
 "daf99bdd-5a22-4d21-9761-16976696b110"],
 Cell[CellGroupData[{
-Cell[6462, 167, 698, 14, 105, "Code", "ExpressionUUID" -> \
+Cell[8941, 246, 698, 14, 105, "Code", "ExpressionUUID" -> \
 "4ff926cc-9de3-4fb3-aa57-b5d27cdeca42"],
-Cell[7163, 183, 862, 12, 192, "Output", "ExpressionUUID" -> \
+Cell[9642, 262, 862, 12, 163, "Output", "ExpressionUUID" -> \
 "9e348038-e427-43ba-8555-4d51833df9a9"],
-Cell[8028, 197, 862, 12, 192, "Output", "ExpressionUUID" -> \
+Cell[10507, 276, 862, 12, 163, "Output", "ExpressionUUID" -> \
 "f4796a1b-8291-468d-b8bc-5c92f9985257"]
 }, Open  ]],
-Cell[8905, 212, 1622, 41, 75, "Text", "ExpressionUUID" -> \
+Cell[11384, 291, 1736, 41, 75, "Text", "ExpressionUUID" -> \
 "838376e0-7ccc-4b30-a842-f01af48cf8b6"],
 Cell[CellGroupData[{
-Cell[10552, 257, 626, 11, 76, "Code", "ExpressionUUID" -> \
+Cell[13145, 336, 626, 11, 76, "Code", "ExpressionUUID" -> \
 "236db247-22ae-4a92-8a93-9ee1d7ff9aef"],
-Cell[11181, 270, 882, 13, 192, "Output", "ExpressionUUID" -> \
+Cell[13774, 349, 882, 13, 163, "Output", "ExpressionUUID" -> \
 "1073a3b7-2eb9-416a-98a1-3601c7a4b2a6"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12100, 288, 404, 8, 76, "Code", "ExpressionUUID" -> \
+Cell[14693, 367, 404, 8, 76, "Code", "ExpressionUUID" -> \
 "61f5c4fc-d414-4f37-bb19-873cc9d307a8"],
-Cell[12507, 298, 851, 12, 192, "Output", "ExpressionUUID" -> \
+Cell[15100, 377, 851, 12, 163, "Output", "ExpressionUUID" -> \
 "93a366f3-006a-46cc-ae3a-5adcc52c34ed"]
 }, Open  ]],
-Cell[13373, 313, 1346, 27, 103, "Text", "ExpressionUUID" -> \
+Cell[15966, 392, 1346, 27, 103, "Text", "ExpressionUUID" -> \
 "a8e357bf-aeeb-41b4-81cd-0ecf1dbd3cc1"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[14756, 345, 359, 6, 91, "Section", "ExpressionUUID" -> \
+Cell[17349, 424, 359, 6, 91, "Section", "ExpressionUUID" -> \
 "20c1d3cf-2a8e-4fff-b468-9d0d5b1ff522"],
-Cell[15118, 353, 1229, 30, 132, "Text", "ExpressionUUID" -> \
+Cell[17711, 432, 1229, 30, 132, "Text", "ExpressionUUID" -> \
 "4181f59d-90c6-46ed-a192-02f850fef7c3"],
 Cell[CellGroupData[{
-Cell[16372, 387, 443, 8, 76, "Input", "ExpressionUUID" -> \
+Cell[18965, 466, 443, 8, 76, "Input", "ExpressionUUID" -> \
 "d8f8fc35-df15-4bdb-9fa2-ddfdbff2b066"],
-Cell[16818, 397, 182, 2, 46, "Output", "ExpressionUUID" -> \
+Cell[19411, 476, 182, 2, 46, "Output", "ExpressionUUID" -> \
 "9fb4b0d0-2982-4476-92a3-2bbbce7816a7"],
-Cell[17003, 401, 806, 11, 192, "Output", "ExpressionUUID" -> \
+Cell[19596, 480, 806, 11, 163, "Output", "ExpressionUUID" -> \
 "4e0cab85-159d-40f6-9d20-3c5fb0be7285"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[17858, 418, 409, 6, 91, "Section", "ExpressionUUID" -> \
+Cell[20451, 497, 409, 6, 91, "Section", "ExpressionUUID" -> \
 "dc7d90b6-626f-4099-8f8c-1af819b41585"],
-Cell[18270, 426, 2611, 77, 265, "Text", "ExpressionUUID" -> \
+Cell[20863, 505, 2810, 85, 267, "Text", "ExpressionUUID" -> \
 "5e8cec69-680d-4cf6-a14b-a38feb6cbd3c"],
-Cell[20884, 505, 152, 3, 46, "Input", "ExpressionUUID" -> \
+Cell[23676, 592, 152, 3, 46, "Input", "ExpressionUUID" -> \
 "58cb50af-8bc3-439f-857f-76406da3813e"],
 Cell[CellGroupData[{
-Cell[21061, 512, 287, 5, 46, "Input", "ExpressionUUID" -> \
+Cell[23853, 599, 287, 5, 46, "Input", "ExpressionUUID" -> \
 "785323cf-1083-49de-9517-2370ab7fac28"],
-Cell[21351, 519, 182, 2, 46, "Output", "ExpressionUUID" -> \
+Cell[24143, 606, 182, 2, 46, "Output", "ExpressionUUID" -> \
 "ac1f3279-3903-47f4-b5a5-3bba266abd14"]
 }, Open  ]],
-Cell[21548, 524, 480, 12, 46, "Text", "ExpressionUUID" -> \
+Cell[24340, 611, 480, 12, 46, "Text", "ExpressionUUID" -> \
 "6fd332d0-1e57-458d-bf40-2476ff66951b"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[22065, 541, 367, 6, 91, "Section", "ExpressionUUID" -> \
+Cell[24857, 628, 367, 6, 91, "Section", "ExpressionUUID" -> \
 "33b736ac-ea26-48b4-ac58-6a15bec96fd4"],
-Cell[22435, 549, 1151, 27, 103, "Text", "ExpressionUUID" -> \
+Cell[25227, 636, 1151, 27, 103, "Text", "ExpressionUUID" -> \
 "59a2973a-cebc-445b-acc3-80d370e65a2c"],
-Cell[23589, 578, 215, 3, 46, "Input", "ExpressionUUID" -> \
+Cell[26381, 665, 215, 3, 46, "Input", "ExpressionUUID" -> \
 "56b12dca-c953-4117-9d0e-1b4f56d0aaf2"],
-Cell[23807, 583, 337, 7, 46, "Text", "ExpressionUUID" -> \
+Cell[26599, 670, 337, 7, 46, "Text", "ExpressionUUID" -> \
 "dd52a3ae-07bd-4ded-82b1-4f6389524e78"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[24181, 595, 228, 4, 86, "AuthorshipSection", "ExpressionUUID" -> \
+Cell[26973, 682, 228, 4, 86, "AuthorshipSection", "ExpressionUUID" -> \
 "c0fd05a1-5b55-4df1-a9ee-a16d24aaeb54"],
-Cell[24412, 601, 214, 4, 36, "Authorship", "ExpressionUUID" -> \
+Cell[27204, 688, 214, 4, 36, "Authorship", "ExpressionUUID" -> \
 "e005ba7c-ac28-4914-8b74-c7361d1d6986"],
-Cell[24629, 607, 208, 4, 36, "Authorship", "ExpressionUUID" -> \
+Cell[27421, 694, 208, 4, 36, "Authorship", "ExpressionUUID" -> \
 "204cf9aa-0554-447e-ab44-c0c302a1d7d0"],
-Cell[24840, 613, 219, 4, 36, "Authorship", "ExpressionUUID" -> \
+Cell[27632, 700, 219, 4, 36, "Authorship", "ExpressionUUID" -> \
 "0fa2f1b8-91c0-4fcd-a046-789938ac6a79"]
 }, Open  ]]
 }, Open  ]]
