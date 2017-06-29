@@ -104,7 +104,33 @@ EXTERN_C DLLEXPORT int GetFullPacketMetadata(WolframLibraryData libData, mint Ar
 	return LIBRARY_NO_ERROR;
 }
 
+bool test(const PDU &pdu) {
+    const IP &ip = pdu.rfind_pdu<IP>();
+    const TCP &tcp = pdu.rfind_pdu<TCP>();
 
+    // the below four calls give out what we want. they get called in a loop when test() gets called again and again
+    ip.src_addr()
+    tcp.sport()
+
+    tcp.dport()
+    ip.dst_addr()
+
+    return true;
+}
+ 
+
+EXTERN_C DLLEXPORT int testfunc(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	Sniffer sniffer("Wireless Network Connection");
+	sniffer.sniff_loop(test);
+
+
+	// pass the output of the above to mathematica
+
+
+	return LIBRARY_NO_ERROR;
+
+}
 EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	int packet_id = (int) MArgument_getInteger(Args[0]);
@@ -113,4 +139,29 @@ EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Ar
 	return 0;
 	// packet->getProtocolName();
 }
+bool dns(const PDU& pdu) {
 
+    // EthernetII / IP / UDP / RawPDU is the packet encapsulated order
+    
+
+    DNS dns = pdu.rfind_pdu<RawPDU>().to<DNS>();
+    
+    // Retrieve the queries and print the domain name:
+    for (const auto& query : dns.queries()) {
+    	query.dname() // gives the domain queried i think
+    }
+    return true;
+}
+
+int dnssniff(int argc, char* argv[]) {
+  
+    // add interface to the config somehow
+    SnifferConfiguration config;
+    config.set_promisc_mode(true);
+    // Only capture udp packets sent to port 53
+    config.set_filter("udp and dst port 53"); // capture only on port 53
+    Sniffer sniffer(argv[1], config);
+    
+    // Start the capture
+    sniffer.sniff_loop(dns);
+}
