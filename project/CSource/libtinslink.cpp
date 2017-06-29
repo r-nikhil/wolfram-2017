@@ -7,16 +7,16 @@
 #include <map>
 
 
-DLLEXPORT mint WolframLibrary_getVersion(){
+EXTERN_C DLLEXPORT mint WolframLibrary_getVersion(){
   return WolframLibraryVersion;
 }
 
-DLLEXPORT int WolframLibrary_initialize( WolframLibraryData libData) \
+EXTERN_C DLLEXPORT int WolframLibrary_initialize( WolframLibraryData libData) \
 {
 	return 0;
 }
 
-DLLEXPORT void WolframLibrary_uninitialize( WolframLibraryData \
+EXTERN_C DLLEXPORT void WolframLibrary_uninitialize( WolframLibraryData \
 libData) {
 	return;
 }
@@ -95,7 +95,7 @@ EXTERN_C DLLEXPORT int GetFullPacketMetadata(WolframLibraryData libData, mint Ar
 	//create an mtensor to return
 	MTensor returnTensor;
 	mint dims[] = {2};
-	int error = libData->MTensor_new(MType_MTensor,1,2);
+	int error = libData->MTensor_new(MType_Integer,1,dims,&returnTensor);
 
 	//set that as the result
 	MArgument_setInteger(Result,timeRes);
@@ -104,12 +104,12 @@ EXTERN_C DLLEXPORT int GetFullPacketMetadata(WolframLibraryData libData, mint Ar
 }
 
 
-int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	int packet_id = (int) MArgument_getInteger(Args[0]);
 
 	Packet * packet = hash_table[packet_id];
-
-	packet->getProtocolName();
+	return 0;
+	// packet->getProtocolName();
 }
 

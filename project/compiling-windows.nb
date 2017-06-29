@@ -1,0 +1,668 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     30228,        660]
+NotebookOptionsPosition[     27524,        589]
+NotebookOutlinePosition[     27898,        605]
+CellTagsIndexPosition[     27855,        602]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData["Quit"], "Input",
+ CellChangeTimes->{{3.707685408158786*^9, 
+  3.707685408609521*^9}},ExpressionUUID->"511dc218-d814-457e-a41a-\
+690f8cb8d97a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"Needs", "[", "\"\<CCompilerDriver`\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"CCompilers", "[", "]"}]}], "Input",
+ CellChangeTimes->{{3.707685354297277*^9, 3.7076853576597567`*^9}, {
+  3.707690342275222*^9, 
+  3.7076903520447807`*^9}},ExpressionUUID->"2b1a67d8-9b7b-47c9-be9b-\
+4ff18ca21a70"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"\<\"Name\"\>", "\[Rule]", "\<\"Visual Studio\"\>"}], ",", 
+    RowBox[{"\<\"Compiler\"\>", "\[Rule]", 
+     "CCompilerDriver`VisualStudioCompiler`VisualStudioCompiler"}], ",", 
+    RowBox[{"\<\"CompilerInstallation\"\>", 
+     "\[Rule]", "\<\"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio \
+14.0\"\>"}], ",", 
+    RowBox[{"\<\"CompilerName\"\>", "\[Rule]", "Automatic"}]}], "}"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.707690353189846*^9, 
+  3.707690662372076*^9},ExpressionUUID->"1937561f-2ae6-4908-b579-\
+de167e170d79"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ValueQ", "[", "lib", "]"}], "&&", 
+     RowBox[{"StringQ", "[", "lib", "]"}], "&&", 
+     RowBox[{"FileExistsQ", "[", "lib", "]"}]}], ",", 
+    RowBox[{"DeleteFile", "[", "lib", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"lib", "=", 
+  RowBox[{"CreateLibrary", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "{", "\"\<C:\\\\Users\\\\Wolfram\\\\Desktop\\\\nik\\\\repos\\\\wolfram-\
+2017\\\\project\\\\CSource\\\\libtinslink.cpp\>\"", "}"}], ",", 
+    "\[IndentingNewLine]", "\"\<libtinslink\>\"", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<IncludeDirectories\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\libtins-debug\\\\libtins\\\\\
+include\>\"", ",", 
+       "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\winpcap\\\\WpdPack\\\\\
+Include\>\""}], "}"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<LibraryDirectories\>\"", "\[Rule]", 
+     RowBox[{
+     "{", "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\libtins-debug\\\\\
+libtins\\\\lib\>\"", "}"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Libraries\>\"", "\[Rule]", 
+     RowBox[{"{", "\"\<tins\>\"", "}"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<Language\>\"", "\[Rule]", "\"\<C++\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<Defines\>\"", "\[Rule]", "\"\<WIN32\>\""}]}], 
+   "\[IndentingNewLine]", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.707681551646233*^9, 3.707681576328314*^9}, {
+   3.707681669060359*^9, 3.707681699467002*^9}, {3.707681740553978*^9, 
+   3.707681740690329*^9}, {3.707682120388508*^9, 3.707682124803252*^9}, {
+   3.707682245682513*^9, 3.707682246195928*^9}, {3.707682379532385*^9, 
+   3.7076823877789307`*^9}, {3.707682469459113*^9, 3.707682470197645*^9}, {
+   3.707682689494356*^9, 3.707682694390067*^9}, {3.7076831180900307`*^9, 
+   3.707683124870778*^9}, {3.7076831742868567`*^9, 3.707683179590222*^9}, {
+   3.707683210893688*^9, 3.7076832131479263`*^9}, {3.707683248939453*^9, 
+   3.707683250779346*^9}, {3.7076832978091784`*^9, 3.707683312526726*^9}, {
+   3.707685260128368*^9, 3.707685262508259*^9}, {3.707685447462579*^9, 
+   3.7076854821405897`*^9}, {3.707685775751013*^9, 3.707685775885529*^9}, 
+   3.707686591110339*^9, {3.7076887295099764`*^9, 3.7076887401355844`*^9}, 
+   3.7076887711033554`*^9, {3.7076888370121255`*^9, 3.707688844754568*^9}, {
+   3.7076907681341305`*^9, 3.7076907704429345`*^9}, {3.7076908800715427`*^9, 
+   3.7076908884049573`*^9}, {3.707691168731475*^9, 
+   3.70769118858371*^9}},ExpressionUUID->"821179e4-0f7c-4b9f-9c3d-\
+9969e51f2d0c"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateLibrary","cmperr",
+   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"libtinslink.obj : error \
+LNK2019: unresolved external symbol \\\\\\\\\\\\\\\"__declspec(dllimport) \
+public: virtual __cdecl Tins::BaseSniffer::~BaseSniffer(void)\\\\\\\\\\\\\\\" \
+(__imp_??1BaseSniffer@Tins@@UEAA@XZ) referenced in function \
+\\\\\\\\\\\\\\\"int __cdecl sniffeth_internal(int,char *,int,char \
+*)\\\\\\\\\\\\\\\" (?sniffeth_internal@@YAHHPEADH0@Z)\\\\\\\"\\\"}]\\)\"",2,
+   23,15,18474331682145811403,"Local","CCompilerDriver`CreateLibrary"},
+  "MessageTemplate2"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
+   3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
+   3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
+   3.7076912892508893`*^9}, 
+   3.7076913713394365`*^9},ExpressionUUID->"b5d631fc-5a3a-4444-90e1-\
+0ec376ce0a4a"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateLibrary","cmperr",
+   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"libtinslink.obj : error \
+LNK2019: unresolved external symbol \\\\\\\\\\\\\\\"__declspec(dllimport) \
+public: class Tins::PacketWrapper<class Tins::PDU *,class Tins::Timestamp> \
+__cdecl Tins::BaseSniffer::next_packet\\\\\\\"\\\", \\\"\[Ellipsis]\\\", \\\"\
+\\\\\\\"t_packet@BaseSniffer@Tins@@QEAA?AV?$PacketWrapper@PEAVPDU@Tins@@\
+VTimestamp@2@@2@XZ) referenced in function \\\\\\\\\\\\\\\"int __cdecl \
+sniffeth_internal(int,char *,int,char *)\\\\\\\\\\\\\\\" \
+(?sniffeth_internal@@YAHHPEADH0@Z)\\\\\\\"\\\"}]\\)\"",2,23,16,
+   18474331682145811403,"Local","CCompilerDriver`CreateLibrary"},
+  "MessageTemplate2"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
+   3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
+   3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
+   3.7076912892508893`*^9}, 
+   3.7076913713706365`*^9},ExpressionUUID->"e531ce36-2d3b-490f-8502-\
+f86f7c05fe83"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateLibrary","cmperr",
+   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"libtinslink.obj : error \
+LNK2019: unresolved external symbol \\\\\\\\\\\\\\\"__declspec(dllimport) \
+public: void __cdecl Tins::BaseSniffer::set_timeout(int)\\\\\\\\\\\\\\\" \
+(__imp_?set_timeout@BaseSniffer@Tins@@QEAAXH@Z) referenced in function \\\\\\\
+\\\\\\\\\"int __cdecl sniffeth_internal(int,char *,int,char \
+*)\\\\\\\\\\\\\\\" (?sniffeth_internal@@YAHHPEADH0@Z)\\\\\\\"\\\"}]\\)\"",2,
+   23,17,18474331682145811403,"Local","CCompilerDriver`CreateLibrary"},
+  "MessageTemplate2"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
+   3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
+   3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
+   3.7076912892508893`*^9}, 
+   3.707691371386236*^9},ExpressionUUID->"7e400734-22e1-46cd-b361-\
+bbd9156b5d1f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General","stop",
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"CreateLibrary\\\", \
+\\\"::\\\", \\\"cmperr\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"",2,23,18,18474331682145811403,"Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
+   3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
+   3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
+   3.7076912892508893`*^9}, 
+   3.7076913714018364`*^9},ExpressionUUID->"0e2f7135-05da-40c8-b150-\
+394a38d145ad"],
+
+Cell[BoxData["$Failed"], "Output",
+ CellChangeTimes->{
+  3.707690325547265*^9, 3.707690669111288*^9, 3.7076907737189407`*^9, 
+   3.707690896146571*^9, {3.7076909505294733`*^9, 3.7076909681537075`*^9}, {
+   3.707691184855304*^9, 3.7076911916891155`*^9}, {3.7076912703170557`*^9, 
+   3.7076912893298893`*^9}, 
+   3.7076913714018364`*^9},ExpressionUUID->"b27f6dd9-04c3-493d-9302-\
+cea6eb9b77c8"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"LibraryLoad", "[", "lib", "]"}]], "Input",
+ CellChangeTimes->{{3.7076822481306467`*^9, 
+  3.70768224839809*^9}},ExpressionUUID->"6db02c02-6183-49d3-913b-\
+cf661ba21c5f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"getPacketTimeStamp", "=", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{"lib", ",", "\"\<GetPacketTimestamp\>\"", ",", 
+    RowBox[{"{", "Integer", "}"}], ",", "Integer"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.707681581053035*^9, 3.707681585200824*^9}, {
+   3.707681779688593*^9, 3.7076817880009212`*^9}, {3.7076822047253532`*^9, 
+   3.7076822753288507`*^9}, 3.707682350245843*^9, 3.707682432608776*^9, {
+   3.707682866701405*^9, 3.707682868843191*^9}, {3.707685511995226*^9, 
+   3.707685514140139*^9}, {3.707686489432736*^9, 3.707686490367185*^9}, {
+   3.7076865761261053`*^9, 
+   3.707686580875863*^9}},ExpressionUUID->"61e9b326-19bb-442b-a7e6-\
+507711b4cf51"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox["LibraryFunction",
+    "SummaryHead"], "[", 
+   DynamicModuleBox[{Typeset`open$$ = False, Typeset`embedState$$ = "Ready"}, 
+    TemplateBox[{PaneSelectorBox[{False -> GridBox[{{
+            PaneBox[
+             ButtonBox[
+              DynamicBox[
+               FEPrivate`FrontEndResource[
+               "FEBitmaps", "SquarePlusIconMedium"]], 
+              ButtonFunction :> (Typeset`open$$ = True), Appearance -> None, 
+              Evaluator -> Automatic, Method -> "Preemptive"], 
+             Alignment -> {Center, Center}, ImageSize -> 
+             Dynamic[{
+               Automatic, 
+                3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                 Magnification])}]], 
+            GraphicsBox[{
+              Thickness[0.038461538461538464`], {
+               FaceForm[{
+                 GrayLevel[0.93], 
+                 Opacity[1.]}], 
+               
+               FilledCurveBox[{{{1, 4, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {
+                1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}}}, {{{
+                25.499999999999996`, 2.5}, {25.499999999999996`, 
+                1.3953100000000003`}, {24.604699999999998`, 
+                0.49999999999999994`}, {23.5, 0.49999999999999994`}, {2.5, 
+                0.49999999999999994`}, {1.3953100000000003`, 
+                0.49999999999999994`}, {0.49999999999999994`, 
+                1.3953100000000003`}, {0.49999999999999994`, 2.5}, {
+                0.49999999999999994`, 23.5}, {0.49999999999999994`, 
+                24.604699999999998`}, {1.3953100000000003`, 
+                25.499999999999996`}, {2.5, 25.499999999999996`}, {23.5, 
+                25.499999999999996`}, {24.604699999999998`, 
+                25.499999999999996`}, {25.499999999999996`, 
+                24.604699999999998`}, {25.499999999999996`, 23.5}, {
+                25.499999999999996`, 2.5}}}]}, {
+               FaceForm[{
+                 RGBColor[0.5, 0.5, 0.5], 
+                 Opacity[1.]}], 
+               
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                0, 1, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{20.5426, 
+                19.116799999999998`}, {16.3832, 21.876199999999997`}, {
+                16.3832, 20.021499999999996`}, {6.930469999999999, 
+                20.021499999999996`}, {6.930469999999999, 
+                18.212100000000003`}, {16.3832, 18.212100000000003`}, {
+                16.3832, 16.357399999999995`}, {20.5426, 
+                19.116799999999998`}}}], 
+               
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                0, 1, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{5.30508, 13.8391}, {
+                9.46445, 11.079700000000003`}, {9.46445, 
+                12.933999999999997`}, {18.917199999999998`, 
+                12.933999999999997`}, {18.917199999999998`, 14.7438}, {
+                9.46445, 14.7438}, {9.46445, 16.598}, {5.30508, 13.8391}}}], 
+               
+               FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {
+                0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1,
+                 3, 3}, {1, 3, 3}, {1, 3, 3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJjIGYCYq4u+eR3VWoOxhkv5j+Qk3SA8fu/r5rKOVHM
+Yd2vmNyjZ9Qcrt9QXbW9S8RBg59767IidQcPMYPGaHFhB+Nn61SfiGo4xBwp
+T7o2V9Dh0Iolfg6/NBxEHv/x1Xgi4FB1XNNqkqQWnP+axUTQjFkbzn+oO2HB
+j/3aDg/Xn5T6WiDoYLs3aJpiqI7DrHN+bO6tQg4zfUR7vF7pQOyfIQyRd9d1
+WLL0U1kLoyjEPdm6DpoTXfQX7xBzKPjQejLkhDacL5J4+LL2Gm2HtNnSl4Vf
+iELM69J2qPZM3tLnJerQX1oozZugDfHPUxGI/4W1HQ5p3TthoyDi4D7lG1v8
+Mi2HgqL9zoEHhB1inOxe3BRG8MH62zXhfIbN1Z82CGhC/GMg4nCm3mN/7TYN
+iHlCUPdGakDc/1kUEr46GhD/eYnD+d9iBf/kC0vC+TuCrSL+X5Vy2HGR4R5T
+uAbEfxYykPBYp+HQqsCuesZAFhL+rJoQ/2rIQdxTpwkJ7yVycPfD+GDzVqLx
+xbUd5HYt2JfqBdWfpA2Jj9mykPDpgYaXtaxDy7yzq86vg8qvlIHE5ylY/Eo7
+XAt7o787TxfOB5ufqesQ9PbyxxkPZSDhZ6nrMAGU3u7LQtLLEx2HN2253UbX
+ofZ76jis/Pay4oynAsT8QG0HKZMv/gW7FCDyTFpwPsz/MD44/Mw1HFjb1uR9
+TVVwWKy880/7FHWIexrkIfLX1RzOMDZZVjHIOaDkh3vSDuj5AwCF11Vc
+                "]]}}, Background -> GrayLevel[0.93], Axes -> False, 
+             AspectRatio -> 1, ImageSize -> {Automatic, 
+               Dynamic[
+               3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                 Magnification]), ImageSizeCache -> {45., {0., 9.}}]}, Frame -> 
+             True, FrameTicks -> None, FrameStyle -> Directive[
+               Thickness[Tiny], 
+               GrayLevel[0.7]]], 
+            GridBox[{{
+               RowBox[{
+                 TagBox["\"Function name: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["\"sniffeth\"", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Argument count: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["1", "SummaryItem"]}]}}, 
+             GridBoxAlignment -> {
+              "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, AutoDelete -> 
+             False, GridBoxItemSize -> {
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+             GridBoxSpacings -> {"Columns" -> {{2}}, "Rows" -> {{Automatic}}},
+              BaseStyle -> {
+              ShowStringCharacters -> False, NumberMarks -> False, 
+               PrintPrecision -> 3, ShowSyntaxStyles -> False}]}}, 
+          GridBoxAlignment -> {"Rows" -> {{Top}}}, AutoDelete -> False, 
+          GridBoxItemSize -> {
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+          BaselinePosition -> {1, 1}], True -> GridBox[{{
+            PaneBox[
+             ButtonBox[
+              DynamicBox[
+               FEPrivate`FrontEndResource[
+               "FEBitmaps", "SquareMinusIconMedium"]], 
+              ButtonFunction :> (Typeset`open$$ = False), Appearance -> None, 
+              Evaluator -> Automatic, Method -> "Preemptive"], 
+             Alignment -> {Center, Center}, ImageSize -> 
+             Dynamic[{
+               Automatic, 
+                3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                 Magnification])}]], 
+            GraphicsBox[{
+              Thickness[0.038461538461538464`], {
+               FaceForm[{
+                 GrayLevel[0.93], 
+                 Opacity[1.]}], 
+               
+               FilledCurveBox[{{{1, 4, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {
+                1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}}}, {{{
+                25.499999999999996`, 2.5}, {25.499999999999996`, 
+                1.3953100000000003`}, {24.604699999999998`, 
+                0.49999999999999994`}, {23.5, 0.49999999999999994`}, {2.5, 
+                0.49999999999999994`}, {1.3953100000000003`, 
+                0.49999999999999994`}, {0.49999999999999994`, 
+                1.3953100000000003`}, {0.49999999999999994`, 2.5}, {
+                0.49999999999999994`, 23.5}, {0.49999999999999994`, 
+                24.604699999999998`}, {1.3953100000000003`, 
+                25.499999999999996`}, {2.5, 25.499999999999996`}, {23.5, 
+                25.499999999999996`}, {24.604699999999998`, 
+                25.499999999999996`}, {25.499999999999996`, 
+                24.604699999999998`}, {25.499999999999996`, 23.5}, {
+                25.499999999999996`, 2.5}}}]}, {
+               FaceForm[{
+                 RGBColor[0.5, 0.5, 0.5], 
+                 Opacity[1.]}], 
+               
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                0, 1, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{20.5426, 
+                19.116799999999998`}, {16.3832, 21.876199999999997`}, {
+                16.3832, 20.021499999999996`}, {6.930469999999999, 
+                20.021499999999996`}, {6.930469999999999, 
+                18.212100000000003`}, {16.3832, 18.212100000000003`}, {
+                16.3832, 16.357399999999995`}, {20.5426, 
+                19.116799999999998`}}}], 
+               
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                0, 1, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{5.30508, 13.8391}, {
+                9.46445, 11.079700000000003`}, {9.46445, 
+                12.933999999999997`}, {18.917199999999998`, 
+                12.933999999999997`}, {18.917199999999998`, 14.7438}, {
+                9.46445, 14.7438}, {9.46445, 16.598}, {5.30508, 13.8391}}}], 
+               
+               FilledCurveBox[{{{1, 4, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {
+                0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 
+                3}, {1, 3, 3}, {1, 3, 3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1,
+                 3, 3}, {1, 3, 3}, {1, 3, 3}}}, CompressedData["
+1:eJxTTMoPSmVmYGBgBGJjIGYCYq4u+eR3VWoOxhkv5j+Qk3SA8fu/r5rKOVHM
+Yd2vmNyjZ9Qcrt9QXbW9S8RBg59767IidQcPMYPGaHFhB+Nn61SfiGo4xBwp
+T7o2V9Dh0Iolfg6/NBxEHv/x1Xgi4FB1XNNqkqQWnP+axUTQjFkbzn+oO2HB
+j/3aDg/Xn5T6WiDoYLs3aJpiqI7DrHN+bO6tQg4zfUR7vF7pQOyfIQyRd9d1
+WLL0U1kLoyjEPdm6DpoTXfQX7xBzKPjQejLkhDacL5J4+LL2Gm2HtNnSl4Vf
+iELM69J2qPZM3tLnJerQX1oozZugDfHPUxGI/4W1HQ5p3TthoyDi4D7lG1v8
+Mi2HgqL9zoEHhB1inOxe3BRG8MH62zXhfIbN1Z82CGhC/GMg4nCm3mN/7TYN
+iHlCUPdGakDc/1kUEr46GhD/eYnD+d9iBf/kC0vC+TuCrSL+X5Vy2HGR4R5T
+uAbEfxYykPBYp+HQqsCuesZAFhL+rJoQ/2rIQdxTpwkJ7yVycPfD+GDzVqLx
+xbUd5HYt2JfqBdWfpA2Jj9mykPDpgYaXtaxDy7yzq86vg8qvlIHE5ylY/Eo7
+XAt7o787TxfOB5ufqesQ9PbyxxkPZSDhZ6nrMAGU3u7LQtLLEx2HN2253UbX
+ofZ76jis/Pay4oynAsT8QG0HKZMv/gW7FCDyTFpwPsz/MD44/Mw1HFjb1uR9
+TVVwWKy880/7FHWIexrkIfLX1RzOMDZZVjHIOaDkh3vSDuj5AwCF11Vc
+                "]]}}, Background -> GrayLevel[0.93], Axes -> False, 
+             AspectRatio -> 1, ImageSize -> {Automatic, 
+               Dynamic[
+               3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                 Magnification]), ImageSizeCache -> {45., {0., 9.}}]}, Frame -> 
+             True, FrameTicks -> None, FrameStyle -> Directive[
+               Thickness[Tiny], 
+               GrayLevel[0.7]]], 
+            GridBox[{{
+               RowBox[{
+                 TagBox["\"Function name: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["\"sniffeth\"", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Argument count: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["1", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Argument types: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  PaneBox[
+                   RowBox[{"{", "Integer", "}"}], 
+                   ImageSize -> {{1, 500}, Automatic}, BaselinePosition -> 
+                   Baseline, ContentPadding -> False, FrameMargins -> 0, 
+                   StripOnInput -> True], "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Return type: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  PaneBox[
+                  "Integer", ImageSize -> {{1, 500}, Automatic}, 
+                   BaselinePosition -> Baseline, ContentPadding -> False, 
+                   FrameMargins -> 0, StripOnInput -> True], 
+                  "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Library: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["\"libtinslink.dylib\"", "SummaryItem"]}]}}, 
+             GridBoxAlignment -> {
+              "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, AutoDelete -> 
+             False, GridBoxItemSize -> {
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+             GridBoxSpacings -> {"Columns" -> {{2}}, "Rows" -> {{Automatic}}},
+              BaseStyle -> {
+              ShowStringCharacters -> False, NumberMarks -> False, 
+               PrintPrecision -> 3, ShowSyntaxStyles -> False}]}}, 
+          GridBoxAlignment -> {"Rows" -> {{Top}}}, AutoDelete -> False, 
+          GridBoxItemSize -> {
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+          BaselinePosition -> {1, 1}]}, 
+       Dynamic[Typeset`open$$], ImageSize -> Automatic]},
+     "SummaryPanel",
+     DisplayFunction->(
+      ButtonBox[#, Active -> False, Alignment -> Left, 
+       Appearance -> {
+        "Default" -> 
+         FrontEnd`FileName[{"Typeset", "SummaryBox"}, "Panel.9.png"]}, 
+       FrameMargins -> 7, BaseStyle -> {}, 
+       DefaultBaseStyle -> {"Panel", Background -> None}, BaselinePosition -> 
+       Baseline]& )],
+    DynamicModuleValues:>{}], "]"}],
+  LibraryFunction[
+  "/Users/ijohnson/Library/Mathematica/SystemFiles/LibraryResources/MacOSX-\
+x86-64/libtinslink.dylib", "sniffeth", {Integer}, Integer],
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{
+  3.707681788272728*^9, 3.707682208661257*^9, {3.707682250585088*^9, 
+   3.707682275652831*^9}, 3.707682351108027*^9, {3.707682433182596*^9, 
+   3.707682443133822*^9}, {3.707682483841084*^9, 3.707682509243141*^9}, {
+   3.7076825815968647`*^9, 3.7076826076838007`*^9}, {3.707682697960692*^9, 
+   3.707682722275869*^9}, {3.7076828526699753`*^9, 3.707682869140514*^9}, {
+   3.707682911266119*^9, 3.707682923596671*^9}, 3.7076831284768333`*^9, {
+   3.70768317145232*^9, 3.707683181828475*^9}, 3.707683217078915*^9, 
+   3.7076832535916643`*^9, {3.707683310077586*^9, 3.707683314690402*^9}, 
+   3.7076852292054*^9, 3.7076852656743317`*^9, {3.707685309794759*^9, 
+   3.7076853661031837`*^9}, {3.707685485632333*^9, 3.707685514708856*^9}, 
+   3.707685695551038*^9, 3.707685975529731*^9, 3.70768607697966*^9, {
+   3.7076864812311707`*^9, 
+   3.7076865009213552`*^9}},ExpressionUUID->"45319d7d-53f4-4da3-9925-\
+c842dde8fc37"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"getPacketTimeStamp", "[", "1000000000", "]"}]], "Input",
+ CellChangeTimes->{{3.707685379407555*^9, 3.70768538540878*^9}, {
+   3.7076855164664*^9, 3.707685517198873*^9}, {3.707686102640389*^9, 
+   3.707686103592334*^9}, 
+   3.707686584707281*^9},ExpressionUUID->"791ea2d5-c687-4aa0-9e8d-\
+b73cf8d28ed5"],
+
+Cell[BoxData["1498697703"], "Output",
+ CellChangeTimes->{
+  3.7076865036917953`*^9},ExpressionUUID->"75a0e5a1-b4c5-41bd-a9c1-\
+5fe36f6773e8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FromUnixTime", "[", "%", "]"}]], "Input",
+ CellChangeTimes->{{3.7076865068162193`*^9, 
+  3.707686509137577*^9}},ExpressionUUID->"73cfa354-837e-4205-929f-\
+44833a0d456a"],
+
+Cell[BoxData[
+ TemplateBox[{RowBox[{"\"Wed 28 Jun 2017 20:55:03\"", 
+     StyleBox[
+      RowBox[{"\"GMT\"", "\[InvisibleSpace]", 
+        RowBox[{"-", "4.`"}]}], FontColor -> GrayLevel[0.5]]}],
+   RowBox[{"DateObject", "[", 
+     RowBox[{
+       RowBox[{"{", 
+         RowBox[{
+          "2017", ",", "6", ",", "28", ",", "20", ",", "55", ",", "3.`"}], 
+         "}"}], ",", "\"Instant\"", ",", "\"Gregorian\"", ",", 
+       RowBox[{"-", "4.`"}]}], "]"}]},
+  "DateObject",
+  Editable->False]], "Output",
+ CellChangeTimes->{
+  3.707686509391535*^9},ExpressionUUID->"fcfe4f66-8abf-4b71-9e21-\
+cca5d562d74a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"PacletUninstall", "[", "\"\<CCompilerDriver\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.707690580003931*^9, 
+  3.7076906005803676`*^9}},ExpressionUUID->"22b75a73-fd62-4691-aee5-\
+bc4baaf4d81f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "PacletUninstall","nodelete",
+   "\"The paclet named \\!\\(\\*RowBox[{\\\"\\\\\\\"CCompilerDriver\\\\\\\"\\\
+\"}]\\) at location \\!\\(\\*RowBox[{\\\"\\\\\\\"C:\\\\\\\\\\\\\\\\Program \
+Files\\\\\\\\\\\\\\\\Wolfram \
+Research\\\\\\\\\\\\\\\\Mathematica\\\\\\\\\\\\\\\\11.1\\\\\\\\\\\\\\\\\
+SystemFiles\\\\\\\\\\\\\\\\Components\\\\\\\\\\\\\\\\CCompilerDriver\\\\\\\"\\\
+\"}]\\) cannot be uninstalled because it does not reside in the standard \
+paclet repository. You will have to delete the paclet's files manually, such \
+as by using DeleteDirectory with DeleteContents->True.\"",2,6,3,
+   18474329605239751037,"Local","PacletManager`PacletUninstall"},
+  "MessageTemplate2"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.707690601500769*^9},ExpressionUUID->"134f6dd8-e249-4ea4-8654-\
+e3cde73557a0"]
+}, Open  ]],
+
+Cell[BoxData["Quit"], "Input",
+ CellChangeTimes->{{3.7076906139183908`*^9, 
+  3.707690614713992*^9}},ExpressionUUID->"7fba5487-8bee-46de-a30b-\
+a28cb0d5d4fc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"PacletInformation", "[", "\"\<CCompilerDriver\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.7076906234656076`*^9, 
+  3.7076906341828265`*^9}},ExpressionUUID->"b2b92972-a07a-4374-8c38-\
+788b476663c6"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"\<\"Name\"\>", "\[Rule]", "\<\"CCompilerDriver\"\>"}], ",", 
+   RowBox[{"\<\"Version\"\>", "\[Rule]", "\<\"10.0.0\"\>"}], ",", 
+   RowBox[{"\<\"BuildNumber\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"Qualifier\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"WolframVersion\"\>", "\[Rule]", "\<\"8+\"\>"}], ",", 
+   RowBox[{"\<\"SystemID\"\>", "\[Rule]", "All"}], ",", 
+   RowBox[{"\<\"Description\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"Category\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"Creator\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"Publisher\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"Support\"\>", "\[Rule]", "\<\"\"\>"}], ",", 
+   RowBox[{"\<\"Internal\"\>", "\[Rule]", "False"}], ",", 
+   RowBox[{"\<\"Location\"\>", 
+    "\[Rule]", "\<\"C:\\\\Program Files\\\\Wolfram \
+Research\\\\Mathematica\\\\11.1\\\\SystemFiles\\\\Components\\\\\
+CCompilerDriver\"\>"}], ",", 
+   RowBox[{"\<\"Context\"\>", "\[Rule]", 
+    RowBox[{"{", "\<\"CCompilerDriver`\"\>", "}"}]}], ",", 
+   RowBox[{"\<\"Enabled\"\>", "\[Rule]", "True"}], ",", 
+   RowBox[{"\<\"Loading\"\>", "\[Rule]", "Manual"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.7076906533864603`*^9},ExpressionUUID->"6bfde3b6-5b13-4cc2-825f-\
+deb448b2bfeb"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.707690585557541*^9, 
+  3.707690586197142*^9}},ExpressionUUID->"6b4c9f28-0117-40db-a050-\
+70ea5867b8be"]
+},
+WindowSize->{1920, 980},
+WindowMargins->{{-4, Automatic}, {Automatic, -4}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 156, 3, 46, "Input", "ExpressionUUID" -> \
+"511dc218-d814-457e-a41a-690f8cb8d97a"],
+Cell[CellGroupData[{
+Cell[739, 27, 324, 7, 76, "Input", "ExpressionUUID" -> \
+"2b1a67d8-9b7b-47c9-be9b-4ff18ca21a70"],
+Cell[1066, 36, 602, 14, 76, "Output", "ExpressionUUID" -> \
+"1937561f-2ae6-4908-b579-de167e170d79"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1705, 55, 2649, 50, 308, "Input", "ExpressionUUID" -> \
+"821179e4-0f7c-4b9f-9c3d-9969e51f2d0c"],
+Cell[4357, 107, 973, 17, 61, "Message", "ExpressionUUID" -> \
+"b5d631fc-5a3a-4444-90e1-0ec376ce0a4a"],
+Cell[5333, 126, 1106, 19, 61, "Message", "ExpressionUUID" -> \
+"e531ce36-2d3b-490f-8502-f86f7c05fe83"],
+Cell[6442, 147, 977, 17, 61, "Message", "ExpressionUUID" -> \
+"7e400734-22e1-46cd-b361-bbd9156b5d1f"],
+Cell[7422, 166, 670, 13, 33, "Message", "ExpressionUUID" -> \
+"0e2f7135-05da-40c8-b150-394a38d145ad"],
+Cell[8095, 181, 392, 7, 46, "Output", "ExpressionUUID" -> \
+"b27f6dd9-04c3-493d-9302-cea6eb9b77c8"]
+}, Open  ]],
+Cell[8502, 191, 193, 4, 46, "Input", "ExpressionUUID" -> \
+"d505846e-727a-45fd-8817-f7e3ef7b5ba7"],
+Cell[CellGroupData[{
+Cell[8720, 199, 695, 12, 46, "Input", "ExpressionUUID" -> \
+"ab1fc420-4f56-4ea7-a64f-af1d6d5533c2"],
+Cell[9418, 213, 13757, 258, 581, "Output", "ExpressionUUID" -> \
+"45319d7d-53f4-4da3-9925-c842dde8fc37"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23212, 476, 326, 6, 46, "Input", "ExpressionUUID" -> \
+"0007f218-8970-480e-9d60-1a3fb26dd030"],
+Cell[23541, 484, 141, 3, 46, "Output", "ExpressionUUID" -> \
+"20925670-4519-48e3-ab3f-46d6b860e645"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23719, 492, 193, 4, 46, "Input", "ExpressionUUID" -> \
+"fcb34a70-239f-4155-ab01-65e17020484e"],
+Cell[23915, 498, 606, 16, 62, "Output", "ExpressionUUID" -> \
+"fcfe4f66-8abf-4b71-9e21-cca5d562d74a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24558, 519, 218, 4, 46, "Input", "ExpressionUUID" -> \
+"22b75a73-fd62-4691-aee5-bc4baaf4d81f"],
+Cell[24779, 525, 829, 15, 61, "Message", "ExpressionUUID" -> \
+"134f6dd8-e249-4ea4-8654-e3cde73557a0"]
+}, Open  ]],
+Cell[25623, 543, 158, 3, 46, "Input", "ExpressionUUID" -> \
+"7fba5487-8bee-46de-a30b-a28cb0d5d4fc"],
+Cell[CellGroupData[{
+Cell[25806, 550, 222, 4, 46, "Input", "ExpressionUUID" -> \
+"b2b92972-a07a-4374-8c38-788b476663c6"],
+Cell[26031, 556, 1322, 25, 162, "Output", "ExpressionUUID" -> \
+"6bfde3b6-5b13-4cc2-825f-deb448b2bfeb"]
+}, Open  ]],
+Cell[27368, 584, 152, 3, 46, "Input", "ExpressionUUID" -> \
+"6b4c9f28-0117-40db-a050-70ea5867b8be"]
+}
+]
+*)
+
