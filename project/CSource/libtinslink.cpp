@@ -24,41 +24,48 @@ using namespace Tins;
 
 
 
-void sniffeth_internal(int ms)
+int sniffeth_internal(int ms)
 {
-	// We want to sniff on eth0. This will capture packets of at most 64 kb.
-	Sniffer snifferObject("eth0");
+	SnifferConfiguration config;
+	config.set_filter("port 80");
+	config.set_promisc_mode(true);
+	config.set_snap_len(400);
+
+	Sniffer snifferObject("en0",config);
 
 	snifferObject.set_timeout(ms);
 
 	// Only retrieve IP datagrams which are sent from 192.168.0.1
-	snifferObject.set_filter("ip src 192.168.0.1");
+	snifferObject.set_filter("ip src 141.133.96.135");
 	// Retrieve the packet.
-	PDU *some_pdu = snifferObject.next_packet();
+	Packet packet = snifferObject.next_packet();
 	// Do something with some_pdu...
 	
+	int time = -1;
 
+	//try to find the IP packet internally for this PDU
+	if(packet.pdu()->find_pdu<IP>())
+	{
+		time = packet.timestamp().seconds();	
+	}
 
-	// Delete it.
-	delete some_pdu;
+	return time;
 }
 
-EXTERN_C DLLEXPORT int sniffeth(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Res)
+
+EXTERN_C DLLEXPORT int GetPacketTimestamp(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
    
 	//the first argument is the milliseconds timeout to use
 	int millisecond = (int) MArgument_getInteger(Args[0]);
 
-	// sniffeth_internal(millisecond);
+	//get the time value from the function
+	int timeRes = sniffeth_internal(millisecond);
+
+	//set that as the result
+	MArgument_setInteger(Result,timeRes);
 
 	return LIBRARY_NO_ERROR;
 }
 
-
-
-EXTERN_C DLLEXPORT int constantzero(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Res)
-{
-   MArgument_setInteger(Res, 0);
-   return LIBRARY_NO_ERROR;
-}
 
