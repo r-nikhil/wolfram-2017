@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     21698,        455]
-NotebookOptionsPosition[     20290,        422]
-NotebookOutlinePosition[     20672,        439]
-CellTagsIndexPosition[     20629,        436]
+NotebookDataLength[     23453,        482]
+NotebookOptionsPosition[     21950,        448]
+NotebookOutlinePosition[     22332,        465]
+CellTagsIndexPosition[     22289,        462]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -57,7 +57,9 @@ CSource/libtinslink.cpp\>\"", "}"}], ",", "\[IndentingNewLine]",
     "\[IndentingNewLine]", 
     RowBox[{"\"\<Language\>\"", "\[Rule]", "\"\<C++\>\""}], ",", 
     "\[IndentingNewLine]", 
-    RowBox[{"\"\<CompilerName\>\"", "\[Rule]", "\"\<clang\>\""}]}], 
+    RowBox[{"\"\<CompilerName\>\"", "\[Rule]", "\"\<clang\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<ShellCommandFunction\>\"", "\[Rule]", "Print"}]}], 
    "\[IndentingNewLine]", "]"}]}]}], "Input",
  CellChangeTimes->{{3.707681551646233*^9, 3.707681576328314*^9}, {
    3.707681669060359*^9, 3.707681699467002*^9}, {3.707681740553978*^9, 
@@ -70,8 +72,26 @@ CSource/libtinslink.cpp\>\"", "}"}], ",", "\[IndentingNewLine]",
    3.707683250779346*^9}, {3.7076832978091784`*^9, 3.707683312526726*^9}, {
    3.707685260128368*^9, 3.707685262508259*^9}, {3.707685447462579*^9, 
    3.7076854821405897`*^9}, {3.707685775751013*^9, 3.707685775885529*^9}, 
-   3.707686591110339*^9},ExpressionUUID->"ea88161f-9f87-473c-955b-\
+   3.707686591110339*^9, {3.707692037418878*^9, 3.70769204386856*^9}, {
+   3.707692079031485*^9, 3.707692085750843*^9}, {3.707692921492632*^9, 
+   3.707692921821233*^9}},ExpressionUUID->"ea88161f-9f87-473c-955b-\
 99fad520049b"],
+
+Cell[BoxData["\<\"/usr/bin/clang -dynamiclib -o \
+\\\"/Users/ijohnson/Library/Mathematica/SystemFiles/LibraryResources/MacOSX-\
+x86-64/Working-ijohnson2maclap-63697-2017210368-1/libtinslink.dylib\\\" -m64 \
+-x c++ -fPIC -O2 -mmacosx-version-min=10.9 -framework Foundation  \
+-I\\\"/Applications/Mathematica.app/Contents/SystemFiles/IncludeFiles/C\\\" \
+-I\\\"/Applications/Mathematica.app/Contents/SystemFiles/Links/MathLink/\
+DeveloperKit/MacOSX-x86-64/CompilerAdditions\\\" \
+-I\\\"/usr/local/Cellar/libtins/3.5/include\\\" \
+\\\"/Users/ijohnson/Documents/wolfram/git/nks17/nikhil/project/CSource/\
+libtinslink.cpp\\\"  \
+-F\\\"/Applications/Mathematica.app/Contents/SystemFiles/Links/MathLink/\
+DeveloperKit/MacOSX-x86-64/CompilerAdditions\\\"  -framework \\\"mathlink\\\" \
+-l\\\"tins\\\" -l\\\"stdc++\\\" -lc++ 2>&1\"\>"], "Print",
+ CellChangeTimes->{
+  3.70769292882388*^9},ExpressionUUID->"b89db680-7a7c-40a1-b2b9-69060f6c8581"],
 
 Cell[BoxData["\<\"/Users/ijohnson/Library/Mathematica/SystemFiles/\
 LibraryResources/MacOSX-x86-64/libtinslink.dylib\"\>"], "Output",
@@ -89,8 +109,10 @@ LibraryResources/MacOSX-x86-64/libtinslink.dylib\"\>"], "Output",
    3.707685362521757*^9}, {3.707685465077042*^9, 3.707685508678608*^9}, 
    3.707685693625904*^9, 3.707685776188717*^9, 3.707685973984478*^9, 
    3.7076860742356052`*^9, 3.707686326129319*^9, {3.707686450963922*^9, 
-   3.7076864989194193`*^9}},ExpressionUUID->"9713a8c2-6536-4ab0-b401-\
-81f969f4401c"]
+   3.7076864989194193`*^9}, 3.7076866233740473`*^9, 3.707691582486882*^9, 
+   3.707692044743701*^9, {3.707692923293086*^9, 
+   3.707692932730101*^9}},ExpressionUUID->"1e6af728-fae9-48de-8b28-\
+a9ed4a0ce386"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -102,17 +124,17 @@ cf661ba21c5f"],
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{"getPacketTimeStamp", "=", 
+ RowBox[{"GetFullPacketMetadata", "=", 
   RowBox[{"LibraryFunctionLoad", "[", 
-   RowBox[{"lib", ",", "\"\<GetPacketTimestamp\>\"", ",", 
+   RowBox[{"lib", ",", "\"\<GetFullPacketMetadata\>\"", ",", 
     RowBox[{"{", "Integer", "}"}], ",", "Integer"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.707681581053035*^9, 3.707681585200824*^9}, {
    3.707681779688593*^9, 3.7076817880009212`*^9}, {3.7076822047253532`*^9, 
    3.7076822753288507`*^9}, 3.707682350245843*^9, 3.707682432608776*^9, {
    3.707682866701405*^9, 3.707682868843191*^9}, {3.707685511995226*^9, 
    3.707685514140139*^9}, {3.707686489432736*^9, 3.707686490367185*^9}, {
-   3.7076865761261053`*^9, 
-   3.707686580875863*^9}},ExpressionUUID->"61e9b326-19bb-442b-a7e6-\
+   3.7076865761261053`*^9, 3.707686580875863*^9}, {3.707691611975116*^9, 
+   3.707691616101407*^9}},ExpressionUUID->"61e9b326-19bb-442b-a7e6-\
 507711b4cf51"],
 
 Cell[BoxData[
@@ -205,7 +227,7 @@ TVVwWKy880/7FHWIexrkIfLX1RzOMDZZVjHIOaDkh3vSDuj5AwCF11Vc
                RowBox[{
                  TagBox["\"Function name: \"", "SummaryItemAnnotation"], 
                  "\[InvisibleSpace]", 
-                 TagBox["\"sniffeth\"", "SummaryItem"]}]}, {
+                 TagBox["\"GetFullPacketMetadata\"", "SummaryItem"]}]}, {
                RowBox[{
                  TagBox["\"Argument count: \"", "SummaryItemAnnotation"], 
                  "\[InvisibleSpace]", 
@@ -304,7 +326,7 @@ TVVwWKy880/7FHWIexrkIfLX1RzOMDZZVjHIOaDkh3vSDuj5AwCF11Vc
                RowBox[{
                  TagBox["\"Function name: \"", "SummaryItemAnnotation"], 
                  "\[InvisibleSpace]", 
-                 TagBox["\"sniffeth\"", "SummaryItem"]}]}, {
+                 TagBox["\"GetFullPacketMetadata\"", "SummaryItem"]}]}, {
                RowBox[{
                  TagBox["\"Argument count: \"", "SummaryItemAnnotation"], 
                  "\[InvisibleSpace]", 
@@ -356,7 +378,7 @@ TVVwWKy880/7FHWIexrkIfLX1RzOMDZZVjHIOaDkh3vSDuj5AwCF11Vc
     DynamicModuleValues:>{}], "]"}],
   LibraryFunction[
   "/Users/ijohnson/Library/Mathematica/SystemFiles/LibraryResources/MacOSX-\
-x86-64/libtinslink.dylib", "sniffeth", {Integer}, Integer],
+x86-64/libtinslink.dylib", "GetFullPacketMetadata", {Integer}, Integer],
   Editable->False,
   SelectWithContents->True,
   Selectable->False]], "Output",
@@ -372,25 +394,28 @@ x86-64/libtinslink.dylib", "sniffeth", {Integer}, Integer],
    3.7076852292054*^9, 3.7076852656743317`*^9, {3.707685309794759*^9, 
    3.7076853661031837`*^9}, {3.707685485632333*^9, 3.707685514708856*^9}, 
    3.707685695551038*^9, 3.707685975529731*^9, 3.70768607697966*^9, {
-   3.7076864812311707`*^9, 
-   3.7076865009213552`*^9}},ExpressionUUID->"116b7ecf-a06e-44af-9e41-\
-809aa053fc2b"]
+   3.7076864812311707`*^9, 3.7076865009213552`*^9}, 3.70768662644567*^9, 
+   3.7076915844656897`*^9, 3.707691616608533*^9, 
+   3.707692934264277*^9},ExpressionUUID->"7a6c2d5c-9fa7-46ca-8fca-\
+7c36cb744051"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{"getPacketTimeStamp", "[", "1000000000", "]"}]], "Input",
+ RowBox[{"GetFullPacketMetadata", "[", "1", "]"}]], "Input",
  CellChangeTimes->{{3.707685379407555*^9, 3.70768538540878*^9}, {
    3.7076855164664*^9, 3.707685517198873*^9}, {3.707686102640389*^9, 
-   3.707686103592334*^9}, 
-   3.707686584707281*^9},ExpressionUUID->"791ea2d5-c687-4aa0-9e8d-\
+   3.707686103592334*^9}, 3.707686584707281*^9, {3.7076866296269207`*^9, 
+   3.7076866360359583`*^9}, 
+   3.707691619747764*^9},ExpressionUUID->"791ea2d5-c687-4aa0-9e8d-\
 b73cf8d28ed5"],
 
-Cell[BoxData["1498697703"], "Output",
+Cell[BoxData["1498697839"], "Output",
  CellChangeTimes->{
-  3.7076865036917953`*^9},ExpressionUUID->"75a0e5a1-b4c5-41bd-a9c1-\
-5fe36f6773e8"]
+  3.7076865036917953`*^9, {3.707686631045965*^9, 
+   3.707686639353334*^9}},ExpressionUUID->"ba310cd8-3604-4e94-8e86-\
+04d012a9e1ed"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -402,7 +427,7 @@ Cell[BoxData[
 44833a0d456a"],
 
 Cell[BoxData[
- TemplateBox[{RowBox[{"\"Wed 28 Jun 2017 20:55:03\"", 
+ TemplateBox[{RowBox[{"\"Wed 28 Jun 2017 20:57:19\"", 
      StyleBox[
       RowBox[{"\"GMT\"", "\[InvisibleSpace]", 
         RowBox[{"-", "4.`"}]}], FontColor -> GrayLevel[0.5]]}],
@@ -410,14 +435,15 @@ Cell[BoxData[
      RowBox[{
        RowBox[{"{", 
          RowBox[{
-          "2017", ",", "6", ",", "28", ",", "20", ",", "55", ",", "3.`"}], 
+          "2017", ",", "6", ",", "28", ",", "20", ",", "57", ",", "19.`"}], 
          "}"}], ",", "\"Instant\"", ",", "\"Gregorian\"", ",", 
        RowBox[{"-", "4.`"}]}], "]"}]},
   "DateObject",
   Editable->False]], "Output",
  CellChangeTimes->{
-  3.707686509391535*^9},ExpressionUUID->"fd540707-210d-4d4b-9a19-\
-f2c31a6d26dc"]
+  3.707686509391535*^9, {3.707686633086479*^9, 
+   3.707686639919265*^9}},ExpressionUUID->"ab004fea-5826-4516-bad1-\
+1cca7050be2e"]
 }, Open  ]]
 },
 WindowSize->{840, 936},
@@ -441,21 +467,22 @@ Notebook[{
 Cell[558, 20, 156, 3, 49, "Input",ExpressionUUID->"ef5da9b6-d933-4dc5-94ea-40d6bbf8a480"],
 Cell[717, 25, 209, 4, 49, "Input",ExpressionUUID->"8a27327e-6c1b-4053-af11-699f4e978f12"],
 Cell[CellGroupData[{
-Cell[951, 33, 2040, 40, 391, "Input",ExpressionUUID->"ea88161f-9f87-473c-955b-99fad520049b"],
-Cell[2994, 75, 1247, 17, 81, "Output",ExpressionUUID->"9713a8c2-6536-4ab0-b401-81f969f4401c"]
+Cell[951, 33, 2285, 44, 422, "Input",ExpressionUUID->"ea88161f-9f87-473c-955b-99fad520049b"],
+Cell[3239, 79, 935, 14, 443, "Print",ExpressionUUID->"b89db680-7a7c-40a1-b2b9-69060f6c8581"],
+Cell[4177, 95, 1369, 19, 81, "Output",ExpressionUUID->"1e6af728-fae9-48de-8b28-a9ed4a0ce386"]
 }, Open  ]],
-Cell[4256, 95, 193, 4, 49, "Input",ExpressionUUID->"6db02c02-6183-49d3-913b-cf661ba21c5f"],
+Cell[5561, 117, 193, 4, 49, "Input",ExpressionUUID->"6db02c02-6183-49d3-913b-cf661ba21c5f"],
 Cell[CellGroupData[{
-Cell[4474, 103, 695, 12, 112, "Input",ExpressionUUID->"61e9b326-19bb-442b-a7e6-507711b4cf51"],
-Cell[5172, 117, 13756, 259, 89, "Output",ExpressionUUID->"116b7ecf-a06e-44af-9e41-809aa053fc2b"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[18965, 381, 326, 6, 49, "Input",ExpressionUUID->"791ea2d5-c687-4aa0-9e8d-b73cf8d28ed5"],
-Cell[19294, 389, 141, 3, 49, "Output",ExpressionUUID->"75a0e5a1-b4c5-41bd-a9c1-5fe36f6773e8"]
+Cell[5779, 125, 747, 12, 112, "Input",ExpressionUUID->"61e9b326-19bb-442b-a7e6-507711b4cf51"],
+Cell[6529, 139, 13888, 260, 89, "Output",ExpressionUUID->"7a6c2d5c-9fa7-46ca-8fca-7c36cb744051"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[19472, 397, 193, 4, 49, "Input",ExpressionUUID->"73cfa354-837e-4205-929f-44833a0d456a"],
-Cell[19668, 403, 606, 16, 62, "Output",ExpressionUUID->"fd540707-210d-4d4b-9a19-f2c31a6d26dc"]
+Cell[20454, 404, 396, 7, 49, "Input",ExpressionUUID->"791ea2d5-c687-4aa0-9e8d-b73cf8d28ed5"],
+Cell[20853, 413, 191, 4, 49, "Output",ExpressionUUID->"ba310cd8-3604-4e94-8e86-04d012a9e1ed"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21081, 422, 193, 4, 49, "Input",ExpressionUUID->"73cfa354-837e-4205-929f-44833a0d456a"],
+Cell[21277, 428, 657, 17, 62, "Output",ExpressionUUID->"ab004fea-5826-4516-bad1-1cca7050be2e"]
 }, Open  ]]
 }
 ]
