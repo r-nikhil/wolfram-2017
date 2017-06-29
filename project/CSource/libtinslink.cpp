@@ -1,5 +1,6 @@
 //include the tins include file
 #include "tins/tins.h"
+#include "pcap.h"
 
 //for librarylink
 #include "WolframLibrary.h"

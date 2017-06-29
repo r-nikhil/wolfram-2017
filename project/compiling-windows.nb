@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     30228,        660]
-NotebookOptionsPosition[     27524,        589]
-NotebookOutlinePosition[     27898,        605]
-CellTagsIndexPosition[     27855,        602]
+NotebookDataLength[     30008,        657]
+NotebookOptionsPosition[     27305,        586]
+NotebookOutlinePosition[     27679,        602]
+CellTagsIndexPosition[     27636,        599]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -73,20 +73,23 @@ Cell[BoxData[{
     RowBox[{"\"\<IncludeDirectories\>\"", "\[Rule]", 
      RowBox[{"{", 
       RowBox[{
-      "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\libtins-debug\\\\libtins\\\\\
-include\>\"", ",", 
+      "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\libtins-vs2015-x64-release \
+(1)\\\\libtins\\\\include\>\"", ",", 
        "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\winpcap\\\\WpdPack\\\\\
 Include\>\""}], "}"}]}], ",", "\[IndentingNewLine]", 
     RowBox[{"\"\<LibraryDirectories\>\"", "\[Rule]", 
      RowBox[{
-     "{", "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\libtins-debug\\\\\
-libtins\\\\lib\>\"", "}"}]}], ",", "\[IndentingNewLine]", 
+     "{", "\"\<C:\\\\Users\\\\Wolfram\\\\Downloads\\\\libtins-vs2015-x64-\
+release (1)\\\\libtins\\\\lib\>\"", "}"}]}], ",", "\[IndentingNewLine]", 
     RowBox[{"\"\<Libraries\>\"", "\[Rule]", 
      RowBox[{"{", "\"\<tins\>\"", "}"}]}], ",", "\[IndentingNewLine]", 
     RowBox[{"\"\<Language\>\"", "\[Rule]", "\"\<C++\>\""}], ",", 
     "\[IndentingNewLine]", 
-    RowBox[{"\"\<Defines\>\"", "\[Rule]", "\"\<WIN32\>\""}]}], 
-   "\[IndentingNewLine]", "]"}]}]}], "Input",
+    RowBox[{"\"\<Defines\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<WIN32\>\"", ",", "\"\<TINS_STATIC\>\"", ",", "\"\<_DEBUG\>\""}], 
+      "}"}]}]}], "\[IndentingNewLine]", "]"}]}]}], "Input",
  CellChangeTimes->{{3.707681551646233*^9, 3.707681576328314*^9}, {
    3.707681669060359*^9, 3.707681699467002*^9}, {3.707681740553978*^9, 
    3.707681740690329*^9}, {3.707682120388508*^9, 3.707682124803252*^9}, {
@@ -101,92 +104,86 @@ libtins\\\\lib\>\"", "}"}]}], ",", "\[IndentingNewLine]",
    3.707686591110339*^9, {3.7076887295099764`*^9, 3.7076887401355844`*^9}, 
    3.7076887711033554`*^9, {3.7076888370121255`*^9, 3.707688844754568*^9}, {
    3.7076907681341305`*^9, 3.7076907704429345`*^9}, {3.7076908800715427`*^9, 
-   3.7076908884049573`*^9}, {3.707691168731475*^9, 
-   3.70769118858371*^9}},ExpressionUUID->"821179e4-0f7c-4b9f-9c3d-\
+   3.7076908884049573`*^9}, {3.707691168731475*^9, 3.70769118858371*^9}, {
+   3.707691704804101*^9, 3.707691717833926*^9}, {3.707691813057376*^9, 
+   3.7076918182757854`*^9}, {3.70769188045441*^9, 
+   3.70769189740604*^9}},ExpressionUUID->"821179e4-0f7c-4b9f-9c3d-\
 9969e51f2d0c"],
 
 Cell[BoxData[
  TemplateBox[{
   "CreateLibrary","cmperr",
-   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"libtinslink.obj : error \
-LNK2019: unresolved external symbol \\\\\\\\\\\\\\\"__declspec(dllimport) \
-public: virtual __cdecl Tins::BaseSniffer::~BaseSniffer(void)\\\\\\\\\\\\\\\" \
-(__imp_??1BaseSniffer@Tins@@UEAA@XZ) referenced in function \
-\\\\\\\\\\\\\\\"int __cdecl sniffeth_internal(int,char *,int,char \
-*)\\\\\\\\\\\\\\\" (?sniffeth_internal@@YAHHPEADH0@Z)\\\\\\\"\\\"}]\\)\"",2,
-   23,15,18474331682145811403,"Local","CCompilerDriver`CreateLibrary"},
+   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"tins.lib(sniffer.obj) : \
+error LNK2038: mismatch detected for 'RuntimeLibrary': value \
+'MDd_DynamicDebug' doesn't match value 'MTd_StaticDebug' in libtinslink.obj\\\
+\\\\\"\\\"}]\\)\"",2,27,23,18474331682145811403,"Local",
+   "CCompilerDriver`CreateLibrary"},
   "MessageTemplate2"]], "Message", "MSG",
  CellChangeTimes->{
   3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
    3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
    3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
-   3.7076912892508893`*^9}, 
-   3.7076913713394365`*^9},ExpressionUUID->"b5d631fc-5a3a-4444-90e1-\
-0ec376ce0a4a"],
+   3.7076912892508893`*^9}, 3.7076913713394365`*^9, 3.707691726115941*^9, 
+   3.707691822295993*^9},ExpressionUUID->"a179b75c-bd5f-4bf0-bad3-\
+c919f246d507"],
 
 Cell[BoxData[
  TemplateBox[{
   "CreateLibrary","cmperr",
-   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"libtinslink.obj : error \
-LNK2019: unresolved external symbol \\\\\\\\\\\\\\\"__declspec(dllimport) \
-public: class Tins::PacketWrapper<class Tins::PDU *,class Tins::Timestamp> \
-__cdecl Tins::BaseSniffer::next_packet\\\\\\\"\\\", \\\"\[Ellipsis]\\\", \\\"\
-\\\\\\\"t_packet@BaseSniffer@Tins@@QEAA?AV?$PacketWrapper@PEAVPDU@Tins@@\
-VTimestamp@2@@2@XZ) referenced in function \\\\\\\\\\\\\\\"int __cdecl \
-sniffeth_internal(int,char *,int,char *)\\\\\\\\\\\\\\\" \
-(?sniffeth_internal@@YAHHPEADH0@Z)\\\\\\\"\\\"}]\\)\"",2,23,16,
-   18474331682145811403,"Local","CCompilerDriver`CreateLibrary"},
+   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"tins.lib(timestamp.obj) : \
+error LNK2038: mismatch detected for 'RuntimeLibrary': value \
+'MDd_DynamicDebug' doesn't match value 'MTd_StaticDebug' in libtinslink.obj\\\
+\\\\\"\\\"}]\\)\"",2,27,24,18474331682145811403,"Local",
+   "CCompilerDriver`CreateLibrary"},
   "MessageTemplate2"]], "Message", "MSG",
  CellChangeTimes->{
   3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
    3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
    3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
-   3.7076912892508893`*^9}, 
-   3.7076913713706365`*^9},ExpressionUUID->"e531ce36-2d3b-490f-8502-\
-f86f7c05fe83"],
+   3.7076912892508893`*^9}, 3.7076913713394365`*^9, 3.707691726115941*^9, 
+   3.707691822327193*^9},ExpressionUUID->"7c22c0c7-10bd-4fd8-a3cc-\
+c3f780bc7d08"],
 
 Cell[BoxData[
  TemplateBox[{
   "CreateLibrary","cmperr",
-   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"libtinslink.obj : error \
-LNK2019: unresolved external symbol \\\\\\\\\\\\\\\"__declspec(dllimport) \
-public: void __cdecl Tins::BaseSniffer::set_timeout(int)\\\\\\\\\\\\\\\" \
-(__imp_?set_timeout@BaseSniffer@Tins@@QEAAXH@Z) referenced in function \\\\\\\
-\\\\\\\\\"int __cdecl sniffeth_internal(int,char *,int,char \
-*)\\\\\\\\\\\\\\\" (?sniffeth_internal@@YAHHPEADH0@Z)\\\\\\\"\\\"}]\\)\"",2,
-   23,17,18474331682145811403,"Local","CCompilerDriver`CreateLibrary"},
+   "\"Compile error: \\!\\(\\*RowBox[{\\\"\\\\\\\"tins.lib(dot11_base.obj) : \
+error LNK2038: mismatch detected for 'RuntimeLibrary': value \
+'MDd_DynamicDebug' doesn't match value 'MTd_StaticDebug' in libtinslink.obj\\\
+\\\\\"\\\"}]\\)\"",2,27,25,18474331682145811403,"Local",
+   "CCompilerDriver`CreateLibrary"},
   "MessageTemplate2"]], "Message", "MSG",
  CellChangeTimes->{
   3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
    3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
    3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
-   3.7076912892508893`*^9}, 
-   3.707691371386236*^9},ExpressionUUID->"7e400734-22e1-46cd-b361-\
-bbd9156b5d1f"],
+   3.7076912892508893`*^9}, 3.7076913713394365`*^9, 3.707691726115941*^9, 
+   3.7076918223427925`*^9},ExpressionUUID->"656145a6-1aa5-47bf-bda0-\
+6f7a5aee3f50"],
 
 Cell[BoxData[
  TemplateBox[{
   "General","stop",
    "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"CreateLibrary\\\", \
 \\\"::\\\", \\\"cmperr\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
-during this calculation.\"",2,23,18,18474331682145811403,"Local"},
+during this calculation.\"",2,27,26,18474331682145811403,"Local"},
   "MessageTemplate"]], "Message", "MSG",
  CellChangeTimes->{
   3.7076903255462646`*^9, 3.7076906690488877`*^9, 3.7076907737033405`*^9, 
    3.707690896115371*^9, {3.7076909505138736`*^9, 3.7076909681381073`*^9}, {
    3.7076911847461033`*^9, 3.7076911916735153`*^9}, {3.7076912703014555`*^9, 
-   3.7076912892508893`*^9}, 
-   3.7076913714018364`*^9},ExpressionUUID->"0e2f7135-05da-40c8-b150-\
-394a38d145ad"],
+   3.7076912892508893`*^9}, 3.7076913713394365`*^9, 3.707691726115941*^9, 
+   3.7076918223583927`*^9},ExpressionUUID->"70b99f8b-7b3c-4edf-a1a3-\
+f3656bd08cd4"],
 
 Cell[BoxData["$Failed"], "Output",
  CellChangeTimes->{
   3.707690325547265*^9, 3.707690669111288*^9, 3.7076907737189407`*^9, 
    3.707690896146571*^9, {3.7076909505294733`*^9, 3.7076909681537075`*^9}, {
    3.707691184855304*^9, 3.7076911916891155`*^9}, {3.7076912703170557`*^9, 
-   3.7076912893298893`*^9}, 
-   3.7076913714018364`*^9},ExpressionUUID->"b27f6dd9-04c3-493d-9302-\
-cea6eb9b77c8"]
+   3.7076912893298893`*^9}, 3.7076913714018364`*^9, 3.707691726178342*^9, 
+   3.7076918223583927`*^9},ExpressionUUID->"1bfd7d21-390c-43af-ac30-\
+32ad3ef9530a"]
 }, Open  ]],
 
 Cell[BoxData[
@@ -613,54 +610,54 @@ Cell[1066, 36, 602, 14, 76, "Output", "ExpressionUUID" -> \
 "1937561f-2ae6-4908-b579-de167e170d79"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1705, 55, 2649, 50, 308, "Input", "ExpressionUUID" -> \
+Cell[1705, 55, 2933, 55, 337, "Input", "ExpressionUUID" -> \
 "821179e4-0f7c-4b9f-9c3d-9969e51f2d0c"],
-Cell[4357, 107, 973, 17, 61, "Message", "ExpressionUUID" -> \
-"b5d631fc-5a3a-4444-90e1-0ec376ce0a4a"],
-Cell[5333, 126, 1106, 19, 61, "Message", "ExpressionUUID" -> \
-"e531ce36-2d3b-490f-8502-f86f7c05fe83"],
-Cell[6442, 147, 977, 17, 61, "Message", "ExpressionUUID" -> \
-"7e400734-22e1-46cd-b361-bbd9156b5d1f"],
-Cell[7422, 166, 670, 13, 33, "Message", "ExpressionUUID" -> \
-"0e2f7135-05da-40c8-b150-394a38d145ad"],
-Cell[8095, 181, 392, 7, 46, "Output", "ExpressionUUID" -> \
-"b27f6dd9-04c3-493d-9302-cea6eb9b77c8"]
+Cell[4641, 112, 818, 15, 33, "Message", "ExpressionUUID" -> \
+"a179b75c-bd5f-4bf0-bad3-c919f246d507"],
+Cell[5462, 129, 820, 15, 33, "Message", "ExpressionUUID" -> \
+"7c22c0c7-10bd-4fd8-a3cc-c3f780bc7d08"],
+Cell[6285, 146, 823, 15, 33, "Message", "ExpressionUUID" -> \
+"656145a6-1aa5-47bf-bda0-6f7a5aee3f50"],
+Cell[7111, 163, 716, 13, 33, "Message", "ExpressionUUID" -> \
+"70b99f8b-7b3c-4edf-a1a3-f3656bd08cd4"],
+Cell[7830, 178, 438, 7, 46, "Output", "ExpressionUUID" -> \
+"1bfd7d21-390c-43af-ac30-32ad3ef9530a"]
 }, Open  ]],
-Cell[8502, 191, 193, 4, 46, "Input", "ExpressionUUID" -> \
+Cell[8283, 188, 193, 4, 46, "Input", "ExpressionUUID" -> \
 "d505846e-727a-45fd-8817-f7e3ef7b5ba7"],
 Cell[CellGroupData[{
-Cell[8720, 199, 695, 12, 46, "Input", "ExpressionUUID" -> \
+Cell[8501, 196, 695, 12, 46, "Input", "ExpressionUUID" -> \
 "ab1fc420-4f56-4ea7-a64f-af1d6d5533c2"],
-Cell[9418, 213, 13757, 258, 581, "Output", "ExpressionUUID" -> \
+Cell[9199, 210, 13757, 258, 581, "Output", "ExpressionUUID" -> \
 "45319d7d-53f4-4da3-9925-c842dde8fc37"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[23212, 476, 326, 6, 46, "Input", "ExpressionUUID" -> \
+Cell[22993, 473, 326, 6, 46, "Input", "ExpressionUUID" -> \
 "0007f218-8970-480e-9d60-1a3fb26dd030"],
-Cell[23541, 484, 141, 3, 46, "Output", "ExpressionUUID" -> \
+Cell[23322, 481, 141, 3, 46, "Output", "ExpressionUUID" -> \
 "20925670-4519-48e3-ab3f-46d6b860e645"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[23719, 492, 193, 4, 46, "Input", "ExpressionUUID" -> \
+Cell[23500, 489, 193, 4, 46, "Input", "ExpressionUUID" -> \
 "fcb34a70-239f-4155-ab01-65e17020484e"],
-Cell[23915, 498, 606, 16, 62, "Output", "ExpressionUUID" -> \
+Cell[23696, 495, 606, 16, 62, "Output", "ExpressionUUID" -> \
 "fcfe4f66-8abf-4b71-9e21-cca5d562d74a"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[24558, 519, 218, 4, 46, "Input", "ExpressionUUID" -> \
+Cell[24339, 516, 218, 4, 46, "Input", "ExpressionUUID" -> \
 "22b75a73-fd62-4691-aee5-bc4baaf4d81f"],
-Cell[24779, 525, 829, 15, 61, "Message", "ExpressionUUID" -> \
+Cell[24560, 522, 829, 15, 61, "Message", "ExpressionUUID" -> \
 "134f6dd8-e249-4ea4-8654-e3cde73557a0"]
 }, Open  ]],
-Cell[25623, 543, 158, 3, 46, "Input", "ExpressionUUID" -> \
+Cell[25404, 540, 158, 3, 46, "Input", "ExpressionUUID" -> \
 "7fba5487-8bee-46de-a30b-a28cb0d5d4fc"],
 Cell[CellGroupData[{
-Cell[25806, 550, 222, 4, 46, "Input", "ExpressionUUID" -> \
+Cell[25587, 547, 222, 4, 46, "Input", "ExpressionUUID" -> \
 "b2b92972-a07a-4374-8c38-788b476663c6"],
-Cell[26031, 556, 1322, 25, 162, "Output", "ExpressionUUID" -> \
+Cell[25812, 553, 1322, 25, 162, "Output", "ExpressionUUID" -> \
 "6bfde3b6-5b13-4cc2-825f-deb448b2bfeb"]
 }, Open  ]],
-Cell[27368, 584, 152, 3, 46, "Input", "ExpressionUUID" -> \
+Cell[27149, 581, 152, 3, 46, "Input", "ExpressionUUID" -> \
 "6b4c9f28-0117-40db-a050-70ea5867b8be"]
 }
 ]
