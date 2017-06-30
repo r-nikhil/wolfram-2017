@@ -183,6 +183,123 @@ EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, M
 	return LIBRARY_NO_ERROR;
 
 }
+bool dnsSniff(const PDU &pdu) 
+{
+	//make a clone of the pdu and store it into the hash table
+    // DNS dns = pdu.rfind_pdu<RawPDU>().to<DNS>();
+
+    // for (const auto& query : dns.queries()) {
+    // continuousPacketTable[nextPacketID++] = query.dname();
+    continuousPacketTable[nextPacketID++] = pdu.clone();
+
+    // }
+
+    return keepRunning;
+}
+
+EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+
+{
+	
+	//create an mtensor to return
+	MTensor returnTensor;
+	mint dims = 0;
+	int tensorlength=0;
+
+
+	for (int i = 0, continuousPacketTable.size(), i++){
+
+		DNS dns = continuousPacketTable[i].rfind_pdu<RawPDU>().to<DNS>();
+
+		for (const auto& query : dns.queries()) {
+
+			for(int j = 0; j < query.dname().length(); j++){tensorlength++}
+
+			dims +=1;
+		}
+
+
+	}	
+	dims = dims + tensorlength;
+	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
+	if(error) return error;
+
+
+
+	mint strIndex = 1;
+	for (int i = 0, continuousPacketTable.size(), i++) {
+
+		for (const auto& query : dns.queries()) {
+
+			//get the length of this interface string
+			mint strLength = query.name().length();
+			if(error) return error;
+
+			//now copy all of the characters from the string into the mtensor
+			for(mint charIndex = 0; charIndex < strLength; charIndex++)
+			{
+				int error = libData->MTensor_setInteger(returnTensor,&strIndex,iface.name()[charIndex]);
+				if(error) return error;
+				strIndex++;
+			}
+
+			//put in the null byte for this interface
+			int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
+			if (error) return error;
+			strIndex++;
+		}
+	}
+
+    MArgument_setMTensor(Result,returnTensor);
+
+}
+void sniff_dns(std::string interface, std::string ipaddress)
+{
+	SnifferConfiguration config;
+	// Only capture udp packets sent to port 53
+
+	config.set_filter("udp and dst port 53");
+
+	//set the config for the sniffer to be promiscous
+	config.set_promisc_mode(true);
+
+	//set the snap length
+	config.set_snap_len(400);
+
+	//set the ip address of the filter
+	char ipStr[100];
+	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
+	config.set_filter(ipStr);
+
+	//now make the sniffer object
+	Sniffer snifferObject(interface,config);
+	snifferObject.sniff_loop(dnsSniff);
+}
+
+EXTERN_C DLLEXPORT int startDNSSniff(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	std::string interface(MArgument_getUTF8String(Args[0]));
+	
+	std:string ipaddress(MArgument_getUTF8String(Args[2]));
+
+	keepRunning = true;
+
+	t = std::thread(sniff_dns,interface,ipaddress);
+
+
+	return LIBRARY_NO_ERROR;
+
+}
+
+EXTERN_C DLLEXPORT int stopDNSSniff(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	keepRunning = false;
+
+	t.join();
+
+	return LIBRARY_NO_ERROR;
+
+}
 
 EXTERN_C DLLEXPORT int listDefaultInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
@@ -220,7 +337,6 @@ EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, 
 
 	mint strIndex = 1;
 	for (const NetworkInterface& iface : interfaces) {
-		printf("%s", iface.name().c_str());
 
 		//get the length of this interface string
 		mint strLength = iface.name().size();
