@@ -207,7 +207,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 	int tensorlength=0;
 
 
-	for (int i = 0, continuousPacketTable.size(), i++){
+	for (int i = 0, i< continuousPacketTable.size(), i++){
 
 		DNS dns = continuousPacketTable[i].rfind_pdu<RawPDU>().to<DNS>();
 
@@ -221,6 +221,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 	}	
 	dims = dims + tensorlength;
+	
 	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
 	if(error) return error;
 
