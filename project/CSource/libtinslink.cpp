@@ -109,11 +109,11 @@ bool test(const PDU &pdu) {
     const TCP &tcp = pdu.rfind_pdu<TCP>();
 
     // the below four calls give out what we want. they get called in a loop when test() gets called again and again
-    ip.src_addr()
-    tcp.sport()
+    ip.src_addr();
+    tcp.sport();
 
-    tcp.dport()
-    ip.dst_addr()
+    tcp.dport();
+    ip.dst_addr();
 
     return true;
 }
@@ -128,7 +128,7 @@ EXTERN_C DLLEXPORT int testfunc(WolframLibraryData libData, mint Argc, MArgument
 	// pass the output of the above to mathematica
 
 
-	return LIBRARY_NO_ERROR;
+	return 0;
 
 }
 EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
@@ -148,7 +148,7 @@ bool dns(const PDU& pdu) {
     
     // Retrieve the queries and print the domain name:
     for (const auto& query : dns.queries()) {
-    	query.dname() // gives the domain queried i think
+    	query.dname(); // gives the domain queried i think
     }
     return true;
 }
@@ -164,4 +164,5 @@ int dnssniff(int argc, char* argv[]) {
     
     // Start the capture
     sniffer.sniff_loop(dns);
+    return true;
 }
