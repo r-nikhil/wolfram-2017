@@ -13,7 +13,7 @@
 using namespace Tins;
 
 //map for individual packets
-std::map<int,Packet * > hash_table;
+std::map<int,Packet * > hash_table = std::map<int,Packet *>();
 
 //packetID for individual packet reading
 static int currentPacketID = 0;
@@ -52,7 +52,7 @@ EXTERN_C DLLEXPORT void WolframLibrary_uninitialize( WolframLibraryData libData)
 
 int sniffeth_internal(int ms, char * interface, int port, char * ipaddress)
 {	
-	int time = -1;
+	// int time = -1;
 
 	SnifferConfiguration config;
 	//add the port to the filter
@@ -114,9 +114,9 @@ EXTERN_C DLLEXPORT int GetFullPacketMetadata(WolframLibraryData libData, mint Ar
 	int timeRes = sniffeth_internal(millisecond,interface,port,address);
 
 	//create an mtensor to return
-	MTensor returnTensor;
-	mint dims[] = {2};
-	int error = libData->MTensor_new(MType_Integer,1,dims,&returnTensor);
+	// MTensor returnTensor;
+	// mint dims[] = {2};
+	// int error = libData->MTensor_new(MType_Integer,1,dims,&returnTensor);
 
 	//set that as the result
 	MArgument_setInteger(Result,timeRes);
@@ -137,8 +137,8 @@ void sniff_thread(std::string interface, int port, std::string ipaddress)
 {
 	SnifferConfiguration config;
 	//add the port to the filter
-	char portStr[10];
-	snprintf(portStr,10,"port %d",port);
+	char portStr[20];
+	snprintf(portStr,20,"ip and port %d",port);
 	config.set_filter(portStr);
 
 	//set the config for the sniffer to be promiscous
@@ -158,6 +158,9 @@ void sniff_thread(std::string interface, int port, std::string ipaddress)
 }
 
 
+std::thread t;
+
+
 EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	//the first argument is the interface to sniff on
@@ -173,9 +176,9 @@ EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, M
 	keepRunning = true;
 
 	//start the sniffer in a background thread
-	std::thread t(sniff_thread,interface,port,ipaddress);
+	t = std::thread(sniff_thread,interface,port,ipaddress);
 
-	t.detach();
+	// t.detach();
 
 	return LIBRARY_NO_ERROR;
 
@@ -215,10 +218,11 @@ EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, 
 EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	//just mark the thread to stop running
-	keepRunning = false;	
+	keepRunning = false;
+
+	t.join();
 
 	return LIBRARY_NO_ERROR;
-
 }
 
 EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
