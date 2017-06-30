@@ -207,13 +207,14 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 	int tensorlength=0;
 
 
-	for (int i = 0, i< continuousPacketTable.size(), i++){
+	for (int i = 0; i< continuousPacketTable.size(); i++){
 
-		DNS dns = continuousPacketTable[i].rfind_pdu<RawPDU>().to<DNS>();
+		DNS dns = continuousPacketTable[i]->rfind_pdu<RawPDU>().to<DNS>();
 
 		for (const auto& query : dns.queries()) {
 
-			for(int j = 0; j < query.dname().length(); j++){tensorlength++}
+			for(int j = 0; j < query.dname().length(); j++)
+				dims++;
 
 			dims +=1;
 		}
@@ -228,18 +229,20 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 
 	mint strIndex = 1;
-	for (int i = 0, i<continuousPacketTable.size(), i++) {
+	for (int x = 0; x<continuousPacketTable.size(); x++) {
+		DNS dns = continuousPacketTable[x]->rfind_pdu<RawPDU>().to<DNS>();
+
 
 		for (const auto& query : dns.queries()) {
 
 			//get the length of this interface string
-			mint strLength = query.name().length();
+			mint strLength = query.dname().length();
 			if(error) return error;
 
 			//now copy all of the characters from the string into the mtensor
 			for(mint charIndex = 0; charIndex < strLength; charIndex++)
 			{
-				int error = libData->MTensor_setInteger(returnTensor,&strIndex,iface.name()[charIndex]);
+				int error = libData->MTensor_setInteger(returnTensor,&strIndex,query.dname()[charIndex]);
 				if(error) return error;
 				strIndex++;
 			}
@@ -252,6 +255,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 	}
 
     MArgument_setMTensor(Result,returnTensor);
+    return LIBRARY_NO_ERROR;
 
 }
 void sniff_dns(std::string interface, std::string ipaddress)
@@ -281,7 +285,7 @@ EXTERN_C DLLEXPORT int startDNSSniff(WolframLibraryData libData, mint Argc, MArg
 {
 	std::string interface(MArgument_getUTF8String(Args[0]));
 	
-	std:string ipaddress(MArgument_getUTF8String(Args[1]));
+	std::string ipaddress(MArgument_getUTF8String(Args[1]));
 
 	keepRunning = true;
 
