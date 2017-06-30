@@ -228,7 +228,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 
 	mint strIndex = 1;
-	for (int i = 0, continuousPacketTable.size(), i++) {
+	for (int i = 0, i<continuousPacketTable.size(), i++) {
 
 		for (const auto& query : dns.queries()) {
 
