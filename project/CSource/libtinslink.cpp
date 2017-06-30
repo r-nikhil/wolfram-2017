@@ -197,13 +197,51 @@ EXTERN_C DLLEXPORT int listDefaultInterface(WolframLibraryData libData, mint Arg
 EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
-	MTensor_setInteger();
-	for (const NetworkInterface& iface : interfaces) {
-    // First print the name (GUID)
-    // cout << "Interface name: " << iface.name();
-		printf("%s", iface.name().c_str());
+
+
+	//create an mtensor to return
+	MTensor returnTensor;
+	mint dims = 0;
+	for(size_t interfaceIndex = 0; interfaceIndex < interfaces.size(); interfaceIndex++)
+	{
+		//for the interface name string
+		dims += interfaces[interfaceIndex].name().size();
+
+		//for the null byte
+		dims += 1;
 	}
-    // give out the guid
+	
+	//this mtensor is 1dimensional - each interface string will be delimited by a null byte
+	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
+	if(error) return error;
+
+	//now we loop over all of the strings in the list of interfaces, appending each interface string
+	//to the MTensor, with null bytes in between
+
+	mint strIndex = 1;
+	for (const NetworkInterface& iface : interfaces) {
+		printf("%s", iface.name().c_str());
+
+		//get the length of this interface string
+		mint strLength = iface.name().size();
+		if(error) return error;
+
+		//now copy all of the characters from the string into the mtensor
+		for(mint charIndex = 0; charIndex < strLength; charIndex++)
+		{
+			int error = libData->MTensor_setInteger(returnTensor,&strIndex,iface.name()[charIndex]);
+			if(error) return error;
+			strIndex++;
+		}
+
+		//put in the null byte for this interface
+		int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
+		if (error) return error;
+		strIndex++;
+	}
+    
+    //finally return the MTensor
+    MArgument_setMTensor(Result,returnTensor);
 
 	return LIBRARY_NO_ERROR;
 }
