@@ -175,6 +175,8 @@ EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, M
 	//start the sniffer in a background thread
 	std::thread t(sniff_thread,interface,port,ipaddress);
 
+	t.detach();
+
 	return 0;
 
 }
