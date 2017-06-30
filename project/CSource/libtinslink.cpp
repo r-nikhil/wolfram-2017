@@ -204,7 +204,6 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 	//create an mtensor to return
 	MTensor returnTensor;
 	mint dims = 0;
-	int tensorlength=0;
 
 
 	for (int i = 0, i< continuousPacketTable.size(), i++){
@@ -213,14 +212,14 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 		for (const auto& query : dns.queries()) {
 
-			for(int j = 0; j < query.dname().length(); j++){tensorlength++}
+			for(int j = 0; j < query.dname().length(); j++)
+				dims++;
 
 			dims +=1;
 		}
 
 
 	}	
-	dims = dims + tensorlength;
 
 	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
 	if(error) return error;
@@ -253,6 +252,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
     MArgument_setMTensor(Result,returnTensor);
 
+    return LIBRARY_NO_ERROR;
 }
 void sniff_dns(std::string interface, std::string ipaddress)
 {
