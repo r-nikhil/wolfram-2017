@@ -221,7 +221,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 	}	
 	dims = dims + tensorlength;
-	
+
 	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
 	if(error) return error;
 
@@ -281,7 +281,7 @@ EXTERN_C DLLEXPORT int startDNSSniff(WolframLibraryData libData, mint Argc, MArg
 {
 	std::string interface(MArgument_getUTF8String(Args[0]));
 	
-	std:string ipaddress(MArgument_getUTF8String(Args[2]));
+	std:string ipaddress(MArgument_getUTF8String(Args[1]));
 
 	keepRunning = true;
 
