@@ -254,8 +254,6 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
     MArgument_setMTensor(Result,returnTensor);
     return LIBRARY_NO_ERROR;
-
-    return LIBRARY_NO_ERROR;
 }
 void sniff_dns(std::string interface, std::string ipaddress)
 {
@@ -367,12 +365,6 @@ EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, 
 }
 
 
-
-
-
-
-
-
 EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	//just mark the thread to stop running
@@ -394,7 +386,7 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
     // tcp.dport();
     // ip.dst_addr();
-
+	// make changes to this later
     return LIBRARY_NO_ERROR;
 }
 
@@ -426,31 +418,5 @@ EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Ar
 	return 0;
 	// packet->getProtocolName();
 }
-bool dns(const PDU& pdu) {
 
-    // EthernetII / IP / UDP / RawPDU is the packet encapsulated order
-    
-
-    DNS dns = pdu.rfind_pdu<RawPDU>().to<DNS>();
-    
-    // Retrieve the queries and print the domain name:
-    for (const auto& query : dns.queries()) {
-    	query.dname(); // gives the domain queried i think
-    }
-    return true;
-}
-
-int dnssniff(int argc, char* argv[]) {
-  
-    // add interface to the config somehow
-    SnifferConfiguration config;
-    config.set_promisc_mode(true);
-    // Only capture udp packets sent to port 53
-    config.set_filter("udp and dst port 53"); // capture only on port 53
-    Sniffer sniffer(argv[1], config);
-    
-    // Start the capture
-    sniffer.sniff_loop(dns);
-    return true;
-}
 
