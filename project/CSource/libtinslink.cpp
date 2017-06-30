@@ -8,7 +8,7 @@
 #include <map>
 #include <atomic>
 #include <future>
-
+#include <vector>
 
 using namespace Tins;
 
@@ -175,9 +175,42 @@ EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, M
 	//start the sniffer in a background thread
 	std::thread t(sniff_thread,interface,port,ipaddress);
 
-	return 0;
+	t.detach();
+
+	return LIBRARY_NO_ERROR;
 
 }
+
+EXTERN_C DLLEXPORT int listDefaultInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	NetworkInterface iface = NetworkInterface::default_interface();
+    // give out the guid
+    std::string * copy = new std::string(iface.name());
+	MArgument_setUTF8String(Result, (char *)copy->c_str());
+	
+	return LIBRARY_NO_ERROR;
+}
+
+EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
+	MTensor_setInteger();
+	for (const NetworkInterface& iface : interfaces) {
+    // First print the name (GUID)
+    // cout << "Interface name: " << iface.name();
+		printf("%s", iface.name().c_str());
+	}
+    // give out the guid
+
+	return LIBRARY_NO_ERROR;
+}
+
+
+
+
+
+
+
 
 EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
