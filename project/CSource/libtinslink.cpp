@@ -9,7 +9,7 @@
 #include <atomic>
 #include <future>
 #include <vector>
-
+#include <sstream>
 using namespace Tins;
 
 //map for individual packets
@@ -272,7 +272,7 @@ void sniff_dns(std::string interface, std::string ipaddress)
 	//set the snap length
 	config.set_snap_len(400);
 
-	set the ip address of the filter
+	// set the ip address of the filter
 	char ipStr[100];
 	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
 	config.set_filter(ipStr);
@@ -306,30 +306,14 @@ EXTERN_C DLLEXPORT int stopDNSSniff(WolframLibraryData libData, mint Argc, MArgu
 	return LIBRARY_NO_ERROR;
 
 }
-
-
-EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+bool tcpSniff(const PDU &pdu) 
 {
-	//the first argument is the interface to sniff on
-	std::string interface(MArgument_getUTF8String(Args[0]));
+	//make a clone of the pdu and store it into the hash table
+    continuousPacketTable[nextPacketID++] = pdu.clone();
 
-	//the second argument is the port to sniff on
-	int port = (int) MArgument_getInteger(Args[1]);
-
-	//the third argument is the source ip address to sniff for
-	std::string ipaddress(MArgument_getUTF8String(Args[2]));	
-
-	//mark the thread as start running
-	keepRunning = true;
-
-	//start the sniffer in a background thread
-	t = std::thread(tcp_sniff_thread,interface,port,ipaddress);
-
-	// t.detach();
-
-	return LIBRARY_NO_ERROR;
-
+    return keepRunning;
 }
+
 void tcp_sniff_thread(std::string interface, int port, std::string ipaddress)
 {
 	SnifferConfiguration config;
@@ -353,12 +337,28 @@ void tcp_sniff_thread(std::string interface, int port, std::string ipaddress)
 	Sniffer snifferObject(interface,config);
 	snifferObject.sniff_loop(tcpSniff);
 }
-bool tcpSniff(const PDU &pdu) 
-{
-	//make a clone of the pdu and store it into the hash table
-    continuousPacketTable[nextPacketID++] = pdu.clone();
 
-    return keepRunning;
+EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	//the first argument is the interface to sniff on
+	std::string interface(MArgument_getUTF8String(Args[0]));
+
+	//the second argument is the port to sniff on
+	int port = (int) MArgument_getInteger(Args[1]);
+
+	//the third argument is the source ip address to sniff for
+	std::string ipaddress(MArgument_getUTF8String(Args[2]));	
+
+	//mark the thread as start running
+	keepRunning = true;
+
+	//start the sniffer in a background thread
+	t = std::thread(tcp_sniff_thread,interface,port,ipaddress);
+
+	// t.detach();
+
+	return LIBRARY_NO_ERROR;
+
 }
 
 
@@ -394,10 +394,10 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 		std::stringstream ss;
 		ss << ip.src_addr() << ":" << tcp.sport() << "to" <<ip.dst_addr() << ":" << tcp.dport();
-		std::string s = ss.str()
+		std::string s = ss.str();
+		
 
-
-		for (s.length()) {
+		for (int k = 0; k < s.length();k++) {
 
 			dims++;
 
@@ -415,12 +415,12 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 	mint strIndex = 1;
 	for (int x = 0; x < continuousPacketTable.size(); x++) {
 
-		const IP &ip = continuousPacketTable[i]->rfind_pdu<IP>();
-		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
+		const IP &ip = continuousPacketTable[x]->rfind_pdu<IP>();
+		const TCP &tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
 
 		std::stringstream ss;
 		ss << ip.src_addr() << ":" << tcp.sport() << "to" <<ip.dst_addr() << ":" << tcp.dport();
-		std::string s = ss.str()
+		std::string s = ss.str();
 
 
 
