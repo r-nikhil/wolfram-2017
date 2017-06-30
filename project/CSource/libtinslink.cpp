@@ -124,75 +124,79 @@ EXTERN_C DLLEXPORT int GetFullPacketMetadata(WolframLibraryData libData, mint Ar
 	return LIBRARY_NO_ERROR;
 }
 
-bool tcpSniff(const PDU &pdu) 
-{
-	//make a clone of the pdu and store it into the hash table
-    continuousPacketTable[nextPacketID++] = pdu.clone();
 
-    return keepRunning;
-}
-
-
-void sniff_thread(std::string interface, int port, std::string ipaddress)
-{
-	SnifferConfiguration config;
-	//add the port to the filter
-	char portStr[20];
-	snprintf(portStr,20,"ip and port %d",port);
-	config.set_filter(portStr);
-
-	//set the config for the sniffer to be promiscous
-	config.set_promisc_mode(true);
-
-	//set the snap length
-	config.set_snap_len(400);
-
-	//set the ip address of the filter
-	char ipStr[100];
-	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
-	config.set_filter(ipStr);
-
-	//now make the sniffer object
-	Sniffer snifferObject(interface,config);
-	snifferObject.sniff_loop(tcpSniff);
-}
 
 
 std::thread t;
-
-
-EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+EXTERN_C DLLEXPORT int listDefaultInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
-	//the first argument is the interface to sniff on
-	std::string interface(MArgument_getUTF8String(Args[0]));
+	NetworkInterface iface = NetworkInterface::default_interface();
+    // give out the guid
+    std::string * copy = new std::string(iface.name());
+	MArgument_setUTF8String(Result, (char *)copy->c_str());
+	
+	return LIBRARY_NO_ERROR;
+}
 
-	//the second argument is the port to sniff on
-	int port = (int) MArgument_getInteger(Args[1]);
+EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
 
-	//the third argument is the source ip address to sniff for
-	std::string ipaddress(MArgument_getUTF8String(Args[2]));	
 
-	//mark the thread as start running
-	keepRunning = true;
+	//create an mtensor to return
+	MTensor returnTensor;
+	mint dims = 0;
+	for(size_t interfaceIndex = 0; interfaceIndex < interfaces.size(); interfaceIndex++)
+	{
+		//for the interface name string
+		dims += interfaces[interfaceIndex].name().size();
 
-	//start the sniffer in a background thread
-	t = std::thread(sniff_thread,interface,port,ipaddress);
+		//for the null byte
+		dims += 1;
+	}
+	
+	//this mtensor is 1dimensional - each interface string will be delimited by a null byte
+	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
+	if(error) return error;
 
-	// t.detach();
+	//now we loop over all of the strings in the list of interfaces, appending each interface string
+	//to the MTensor, with null bytes in between
+
+	mint strIndex = 1;
+	for (const NetworkInterface& iface : interfaces) {
+
+		//get the length of this interface string
+		mint strLength = iface.name().size();
+		if(error) return error;
+
+		//now copy all of the characters from the string into the mtensor
+		for(mint charIndex = 0; charIndex < strLength; charIndex++)
+		{
+			int error = libData->MTensor_setInteger(returnTensor,&strIndex,iface.name()[charIndex]);
+			if(error) return error;
+			strIndex++;
+		}
+
+		//put in the null byte for this interface
+		int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
+		if (error) return error;
+		strIndex++;
+	}
+    
+    //finally return the MTensor
+    MArgument_setMTensor(Result,returnTensor);
 
 	return LIBRARY_NO_ERROR;
-
 }
+
+
 bool dnsSniff(const PDU &pdu) 
 {
 	//make a clone of the pdu and store it into the hash table
-    // DNS dns = pdu.rfind_pdu<RawPDU>().to<DNS>();
 
-    // for (const auto& query : dns.queries()) {
-    // continuousPacketTable[nextPacketID++] = query.dname();
     continuousPacketTable[nextPacketID++] = pdu.clone();
 
-    // }
+
 
     return keepRunning;
 }
@@ -268,7 +272,7 @@ void sniff_dns(std::string interface, std::string ipaddress)
 	//set the snap length
 	config.set_snap_len(400);
 
-	//set the ip address of the filter
+	set the ip address of the filter
 	char ipStr[100];
 	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
 	config.set_filter(ipStr);
@@ -303,65 +307,58 @@ EXTERN_C DLLEXPORT int stopDNSSniff(WolframLibraryData libData, mint Argc, MArgu
 
 }
 
-EXTERN_C DLLEXPORT int listDefaultInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+
+EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
-	NetworkInterface iface = NetworkInterface::default_interface();
-    // give out the guid
-    std::string * copy = new std::string(iface.name());
-	MArgument_setUTF8String(Result, (char *)copy->c_str());
-	
+	//the first argument is the interface to sniff on
+	std::string interface(MArgument_getUTF8String(Args[0]));
+
+	//the second argument is the port to sniff on
+	int port = (int) MArgument_getInteger(Args[1]);
+
+	//the third argument is the source ip address to sniff for
+	std::string ipaddress(MArgument_getUTF8String(Args[2]));	
+
+	//mark the thread as start running
+	keepRunning = true;
+
+	//start the sniffer in a background thread
+	t = std::thread(tcp_sniff_thread,interface,port,ipaddress);
+
+	// t.detach();
+
 	return LIBRARY_NO_ERROR;
+
 }
-
-EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+void tcp_sniff_thread(std::string interface, int port, std::string ipaddress)
 {
-	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
+	SnifferConfiguration config;
+	//add the port to the filter
+	char portStr[20];
+	snprintf(portStr,20,"ip and port %d",port);
+	config.set_filter(portStr);
 
+	//set the config for the sniffer to be promiscous
+	config.set_promisc_mode(true);
 
-	//create an mtensor to return
-	MTensor returnTensor;
-	mint dims = 0;
-	for(size_t interfaceIndex = 0; interfaceIndex < interfaces.size(); interfaceIndex++)
-	{
-		//for the interface name string
-		dims += interfaces[interfaceIndex].name().size();
+	//set the snap length
+	config.set_snap_len(400);
 
-		//for the null byte
-		dims += 1;
-	}
-	
-	//this mtensor is 1dimensional - each interface string will be delimited by a null byte
-	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
-	if(error) return error;
+	//set the ip address of the filter
+	char ipStr[100];
+	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
+	config.set_filter(ipStr);
 
-	//now we loop over all of the strings in the list of interfaces, appending each interface string
-	//to the MTensor, with null bytes in between
+	//now make the sniffer object
+	Sniffer snifferObject(interface,config);
+	snifferObject.sniff_loop(tcpSniff);
+}
+bool tcpSniff(const PDU &pdu) 
+{
+	//make a clone of the pdu and store it into the hash table
+    continuousPacketTable[nextPacketID++] = pdu.clone();
 
-	mint strIndex = 1;
-	for (const NetworkInterface& iface : interfaces) {
-
-		//get the length of this interface string
-		mint strLength = iface.name().size();
-		if(error) return error;
-
-		//now copy all of the characters from the string into the mtensor
-		for(mint charIndex = 0; charIndex < strLength; charIndex++)
-		{
-			int error = libData->MTensor_setInteger(returnTensor,&strIndex,iface.name()[charIndex]);
-			if(error) return error;
-			strIndex++;
-		}
-
-		//put in the null byte for this interface
-		int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
-		if (error) return error;
-		strIndex++;
-	}
-    
-    //finally return the MTensor
-    MArgument_setMTensor(Result,returnTensor);
-
-	return LIBRARY_NO_ERROR;
+    return keepRunning;
 }
 
 
@@ -377,8 +374,7 @@ EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MA
 
 EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
-	// const IP &ip = pdu.rfind_pdu<IP>();
-    // const TCP &tcp = pdu.rfind_pdu<TCP>();
+
 
 	// the below four calls give out what we want. they get called in a loop when test() gets called again and again
     // ip.src_addr();
@@ -387,6 +383,67 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
     // tcp.dport();
     // ip.dst_addr();
 	// make changes to this later
+	MTensor returnTensor;
+	mint dims = 0;
+
+
+	for (int i = 0; i< continuousPacketTable.size(); i++){
+
+		const IP &ip = continuousPacketTable[i]->rfind_pdu<IP>();
+		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
+
+		std::stringstream ss;
+		ss << ip.src_addr() << ":" << tcp.sport() << "to" <<ip.dst_addr() << ":" << tcp.dport();
+		std::string s = ss.str()
+
+
+		for (s.length()) {
+
+			dims++;
+
+			dims +=1; // for the null byte
+		}
+
+
+	}	
+
+	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
+	if(error) return error;
+
+
+
+	mint strIndex = 1;
+	for (int x = 0; x < continuousPacketTable.size(); x++) {
+
+		const IP &ip = continuousPacketTable[i]->rfind_pdu<IP>();
+		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
+
+		std::stringstream ss;
+		ss << ip.src_addr() << ":" << tcp.sport() << "to" <<ip.dst_addr() << ":" << tcp.dport();
+		std::string s = ss.str()
+
+
+
+			//get the length of this interface string
+			mint strLength = s.length();
+			if(error) return error;
+
+			//now copy all of the characters from the string into the mtensor
+			for(mint charIndex = 0; charIndex < strLength; charIndex++)
+			{
+				int error = libData->MTensor_setInteger(returnTensor,&strIndex,s[charIndex]);
+				if(error) return error;
+				strIndex++;
+			}
+
+			//put in the null byte for this interface
+			int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
+			if (error) return error;
+			strIndex++;
+			}
+
+    MArgument_setMTensor(Result,returnTensor);
+
     return LIBRARY_NO_ERROR;
 }
 
