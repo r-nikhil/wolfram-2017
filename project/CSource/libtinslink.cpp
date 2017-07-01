@@ -314,7 +314,7 @@ bool tcpSniff(const PDU &pdu)
     return keepRunning;
 }
 
-void tcp_sniff_thread(std::string interface, int port, std::string ipaddress)
+void tcp_sniff_thread(std::string interface, int port, std::string ipaddress, WolframLibraryData libData)
 {
 	SnifferConfiguration config;
 	//add the port to the filter
@@ -334,8 +334,16 @@ void tcp_sniff_thread(std::string interface, int port, std::string ipaddress)
 	config.set_filter(ipStr);
 
 	//now make the sniffer object
-	Sniffer snifferObject(interface,config);
-	snifferObject.sniff_loop(tcpSniff);
+	try
+	{
+		Sniffer snifferObject(interface,config);
+		snifferObject.sniff_loop(tcpSniff);
+	}
+	catch(...)
+	{
+		libData->evaluateExpression(libData,"Print[\"failed to open interface\"]",6,0,NULL);
+		return;
+	}
 }
 
 EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
@@ -353,9 +361,9 @@ EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, M
 	keepRunning = true;
 
 	//start the sniffer in a background thread
-	t = std::thread(tcp_sniff_thread,interface,port,ipaddress);
+	t = std::thread(tcp_sniff_thread,interface,port,ipaddress,libData);
 
-	// t.detach();
+	t.detach();
 
 	return LIBRARY_NO_ERROR;
 
@@ -367,7 +375,10 @@ EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MA
 	//just mark the thread to stop running
 	keepRunning = false;
 
-	t.join();
+	if(t.joinable())
+	{
+		t.join();
+	}
 
 	return LIBRARY_NO_ERROR;
 }
