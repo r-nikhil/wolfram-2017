@@ -124,10 +124,8 @@ EXTERN_C DLLEXPORT int GetFullPacketMetadata(WolframLibraryData libData, mint Ar
 	return LIBRARY_NO_ERROR;
 }
 
-
-
-
 std::thread t;
+
 EXTERN_C DLLEXPORT int listDefaultInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	NetworkInterface iface = NetworkInterface::default_interface();
@@ -195,9 +193,6 @@ bool dnsSniff(const PDU &pdu)
 	//make a clone of the pdu and store it into the hash table
 
     continuousPacketTable[nextPacketID++] = pdu.clone();
-
-
-
     return keepRunning;
 }
 
@@ -259,7 +254,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
     MArgument_setMTensor(Result,returnTensor);
     return LIBRARY_NO_ERROR;
 }
-void sniff_dns(std::string interface, std::string ipaddress)
+void sniff_dns_thread(std::string interface, WolframLibraryData libData)
 {
 	SnifferConfiguration config;
 	// Only capture udp packets sent to port 53
@@ -272,26 +267,27 @@ void sniff_dns(std::string interface, std::string ipaddress)
 	//set the snap length
 	config.set_snap_len(400);
 
-	// set the ip address of the filter
-	char ipStr[100];
-	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
-	config.set_filter(ipStr);
-
 	//now make the sniffer object
+	try{
 	Sniffer snifferObject(interface,config);
 	snifferObject.sniff_loop(dnsSniff);
+	}
+	catch(...)
+	{
+		libData->evaluateExpression(libData,"Print[\"failed to open interface\"]",6,0,NULL);
+		return;
+	}
 }
 
 EXTERN_C DLLEXPORT int startDNSSniff(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	std::string interface(MArgument_getUTF8String(Args[0]));
 	
-	std::string ipaddress(MArgument_getUTF8String(Args[1]));
-
 	keepRunning = true;
 
-	t = std::thread(sniff_dns,interface,ipaddress);
+	t = std::thread(sniff_dns_thread,interface, libData);
 
+	t.detach();
 
 	return LIBRARY_NO_ERROR;
 
@@ -300,9 +296,10 @@ EXTERN_C DLLEXPORT int startDNSSniff(WolframLibraryData libData, mint Argc, MArg
 EXTERN_C DLLEXPORT int stopDNSSniff(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	keepRunning = false;
-
-	t.join();
-
+	if(t.joinable())
+	{
+		t.join();
+	}
 	return LIBRARY_NO_ERROR;
 
 }
@@ -310,7 +307,6 @@ bool tcpSniff(const PDU &pdu)
 {
 	//make a clone of the pdu and store it into the hash table
     continuousPacketTable[nextPacketID++] = pdu.clone();
-    printf("tcp sniff called");
     return keepRunning;
 }
 
@@ -432,7 +428,6 @@ EXTERN_C DLLEXPORT int TCPSniffingHashTableSize(WolframLibraryData libData, mint
 {
 
     MArgument_setInteger(Result,continuousPacketTable.size());
-
     return LIBRARY_NO_ERROR;
 }
   
