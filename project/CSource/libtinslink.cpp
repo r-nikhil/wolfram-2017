@@ -370,7 +370,9 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
 
 		std::stringstream ss;
-		ss << ip.src_addr() << ":" << tcp.sport() << "to" <<ip.dst_addr() << ":" << tcp.dport();
+
+		ss << ip.src_addr() << ":" << tcp.sport() << "to" << ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags();
+
 		std::string s = ss.str();
 		
 
@@ -396,7 +398,7 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 		const TCP &tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
 
 		std::stringstream ss;
-		ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport();
+		ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags();
 		std::string s = ss.str();
 
 
