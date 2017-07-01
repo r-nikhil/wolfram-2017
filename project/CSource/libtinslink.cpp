@@ -310,34 +310,18 @@ bool tcpSniff(const PDU &pdu)
 {
 	//make a clone of the pdu and store it into the hash table
     continuousPacketTable[nextPacketID++] = pdu.clone();
-
+    printf("tcp sniff called");
     return keepRunning;
 }
 
-void tcp_sniff_thread(std::string interface, int port, std::string ipaddress, WolframLibraryData libData)
+void tcp_sniff_thread(std::string interface, WolframLibraryData libData)
 {
-	SnifferConfiguration config;
-	//add the port to the filter
-	char portStr[20];
-	snprintf(portStr,20,"ip and port %d",port);
-	config.set_filter(portStr);
-
-	//set the config for the sniffer to be promiscous
-	config.set_promisc_mode(true);
-
-	//set the snap length
-	config.set_snap_len(400);
-
-	//set the ip address of the filter
-	char ipStr[100];
-	snprintf(ipStr,10,"ip src %s",ipaddress.c_str());
-	config.set_filter(ipStr);
-
 	//now make the sniffer object
 	try
 	{
-		Sniffer snifferObject(interface,config);
+		Sniffer snifferObject(interface);
 		snifferObject.sniff_loop(tcpSniff);
+
 	}
 	catch(...)
 	{
@@ -351,17 +335,11 @@ EXTERN_C DLLEXPORT int StartTCPSniffing(WolframLibraryData libData, mint Argc, M
 	//the first argument is the interface to sniff on
 	std::string interface(MArgument_getUTF8String(Args[0]));
 
-	//the second argument is the port to sniff on
-	int port = (int) MArgument_getInteger(Args[1]);
-
-	//the third argument is the source ip address to sniff for
-	std::string ipaddress(MArgument_getUTF8String(Args[2]));	
-
 	//mark the thread as start running
 	keepRunning = true;
 
 	//start the sniffer in a background thread
-	t = std::thread(tcp_sniff_thread,interface,port,ipaddress,libData);
+	t = std::thread(tcp_sniff_thread,interface,libData);
 
 	t.detach();
 
@@ -422,7 +400,7 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 		const TCP &tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
 
 		std::stringstream ss;
-		ss << ip.src_addr() << ":" << tcp.sport() << "to" <<ip.dst_addr() << ":" << tcp.dport();
+		ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport();
 		std::string s = ss.str();
 
 
@@ -452,15 +430,6 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 EXTERN_C DLLEXPORT int TCPSniffingHashTableSize(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
-	// const IP &ip = pdu.rfind_pdu<IP>();
-    // const TCP &tcp = pdu.rfind_pdu<TCP>();
-
-	// the below four calls give out what we want. they get called in a loop when test() gets called again and again
-    // ip.src_addr();
-    // tcp.sport();
-
-    // tcp.dport();
-    // ip.dst_addr();
 
     MArgument_setInteger(Result,continuousPacketTable.size());
 
