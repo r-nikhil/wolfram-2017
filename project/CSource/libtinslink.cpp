@@ -386,14 +386,6 @@ EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MA
 EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 
-
-	// the below four calls give out what we want. they get called in a loop when test() gets called again and again
-    // ip.src_addr();
-    // tcp.sport();
-
-    // tcp.dport();
-    // ip.dst_addr();
-	// make changes to this later
 	MTensor returnTensor;
 	mint dims = 0;
 
