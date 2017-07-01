@@ -424,16 +424,6 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
     return LIBRARY_NO_ERROR;
 }
 
-EXTERN_C DLLEXPORT int TCPSniffingHashTableSize(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
-{
-
-    MArgument_setInteger(Result,continuousPacketTable.size());
-    return LIBRARY_NO_ERROR;
-}
-  
-
-
-
 EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
 	int packet_id = (int) MArgument_getInteger(Args[0]);
