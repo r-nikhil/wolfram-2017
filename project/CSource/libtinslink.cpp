@@ -160,7 +160,7 @@ EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, 
 	//now we loop over all of the strings in the list of interfaces, appending each interface string
 	//to the MTensor, with null bytes in between
 
-	mint strIndex = 1;
+	mint TensorPosition = 1;
 	for (const NetworkInterface& iface : interfaces) {
 
 		//get the length of this interface string
@@ -170,15 +170,15 @@ EXTERN_C DLLEXPORT int listAllInterfaces(WolframLibraryData libData, mint Argc, 
 		//now copy all of the characters from the string into the mtensor
 		for(mint charIndex = 0; charIndex < strLength; charIndex++)
 		{
-			int error = libData->MTensor_setInteger(returnTensor,&strIndex,iface.name()[charIndex]);
+			int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,iface.name()[charIndex]);
 			if(error) return error;
-			strIndex++;
+			TensorPosition++;
 		}
 
 		//put in the null byte for this interface
-		int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
+		int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,0);
 		if (error) return error;
-		strIndex++;
+		TensorPosition++;
 	}
     
     //finally return the MTensor
@@ -225,7 +225,7 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 
 
-	mint strIndex = 1;
+	mint TensorPosition = 1;
 	for (int x = 0; x<continuousPacketTable.size(); x++) {
 		DNS dns = continuousPacketTable[x]->rfind_pdu<RawPDU>().to<DNS>();
 
@@ -239,15 +239,15 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 			//now copy all of the characters from the string into the mtensor
 			for(mint charIndex = 0; charIndex < strLength; charIndex++)
 			{
-				int error = libData->MTensor_setInteger(returnTensor,&strIndex,query.dname()[charIndex]);
+				int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,query.dname()[charIndex]);
 				if(error) return error;
-				strIndex++;
+				TensorPosition++;
 			}
 
 			//put in the null byte for this interface
-			int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
+			int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,0);
 			if (error) return error;
-			strIndex++;
+			TensorPosition++;
 		}
 	}
 
@@ -368,21 +368,29 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 		const IP &ip = continuousPacketTable[i]->rfind_pdu<IP>();
 		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
+		const RawPDU& raw = tcp.rfind_pdu<RawPDU>();
+		raw.payload();
+		const RawPDU::payload_type& payload = raw.payload();
+		
+
+		// char * test = new char[raw.payload().size()];
+
+		// std::copy(raw.payload().begin(), raw.payload().end(), test);
+		// std::string payload (test);	
+				// std::string payload(raw.payload()->begin(), raw.payload()->end());
 
 		std::stringstream ss;
 
-		ss << ip.src_addr() << ":" << tcp.sport() << "to" << ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags();
+		ss << ip.src_addr() << ":" << tcp.sport() << "to" << ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags()<< "headersize" << tcp.header_size();
 
 		std::string s = ss.str();
-		
 
 		for (int k = 0; k < s.length();k++) {
 
 			dims++;
 
-			dims +=1; // for the null byte
+			dims +=1; // size integer for the packet. 
 		}
-
 
 	}	
 
@@ -391,35 +399,64 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 
 
-	mint strIndex = 1;
+	mint TensorPosition = 1;
+
+
+
+
 	for (int x = 0; x < continuousPacketTable.size(); x++) {
 
 		const IP &ip = continuousPacketTable[x]->rfind_pdu<IP>();
 		const TCP &tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
+		const RawPDU& raw = tcp.rfind_pdu<RawPDU>();
+		// const RawPDU::payload_type& payload = raw.payload();
+		// char * test = new char[raw.payload().size()];
 
+		// std::copy(raw.payload().begin(), raw.payload().end(), test);
+		// std::string payload (test);
+		// std::string payload(raw.payload()->begin(), raw.payload()->end());
 		std::stringstream ss;
-		ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags();
+		ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags() << "headersize" << tcp.header_size();
 		std::string s = ss.str();
 
+		mint totalSize = s.length() + raw.payload().size();
 
 
 			//get the length of this interface string
 			mint strLength = s.length();
 			if(error) return error;
 
-			//now copy all of the characters from the string into the mtensor
+			libData->MTensor_setInteger(returnTensor,&TensorPosition, totalSize);
+						//now copy all of the characters from the string into the mtensor
+
 			for(mint charIndex = 0; charIndex < strLength; charIndex++)
 			{
-				int error = libData->MTensor_setInteger(returnTensor,&strIndex,s[charIndex]);
+				int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,s[charIndex]);
 				if(error) return error;
-				strIndex++;
+				TensorPosition++;
 			}
 
-			//put in the null byte for this interface
-			int error = libData->MTensor_setInteger(returnTensor,&strIndex,0);
-			if (error) return error;
-			strIndex++;
+			for(mint idex = 0; idex < raw.payload().size(); idex ++){
+
+				int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,raw.payload()[idex]);
+				if(error) return error;
+				TensorPosition++;
 			}
+
+			// raw.payload()
+			
+
+
+
+			//put in the null byte for this interface
+			// int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,0);
+			// if (error) return error;
+			// TensorPosition++;
+
+
+
+			}
+
 
     MArgument_setMTensor(Result,returnTensor);
 
