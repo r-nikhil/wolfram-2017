@@ -368,9 +368,7 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 		const IP &ip = continuousPacketTable[i]->rfind_pdu<IP>();
 		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
-		const RawPDU& raw = tcp.rfind_pdu<RawPDU>();
-		raw.payload();
-		const RawPDU::payload_type& payload = raw.payload();
+		const RawPDU& raw = tcp.rfind_pdu<RawPDU>(PDU::TCP);
 		
 
 		// char * test = new char[raw.payload().size()];
@@ -385,13 +383,8 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 		std::string s = ss.str();
 
-		for (int k = 0; k < s.length();k++) {
-
-			dims++;
-
-			dims +=1; // size integer for the packet. 
-		}
-
+		// the +1 for the size prepended to the packet (which is the length of the string + payload)
+		dims += 1 + s.length() + raw.payload().size();
 	}	
 
 	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
@@ -427,8 +420,10 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 			if(error) return error;
 
 			libData->MTensor_setInteger(returnTensor,&TensorPosition, totalSize);
-						//now copy all of the characters from the string into the mtensor
+			//don't forget to increment tensor position
+			TensorPosition++;
 
+			//now copy all of the characters from the string into the mtensor
 			for(mint charIndex = 0; charIndex < strLength; charIndex++)
 			{
 				int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,s[charIndex]);
@@ -443,21 +438,9 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 				TensorPosition++;
 			}
 
-			// raw.payload()
-			
+		}
 
-
-
-			//put in the null byte for this interface
-			// int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,0);
-			// if (error) return error;
-			// TensorPosition++;
-
-
-
-			}
-
-
+	//return the tensor
     MArgument_setMTensor(Result,returnTensor);
 
     return LIBRARY_NO_ERROR;
