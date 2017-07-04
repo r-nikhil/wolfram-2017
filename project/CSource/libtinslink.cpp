@@ -379,7 +379,7 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 				const TCP & tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
 
 				std::string data("test");
-				RawPDU::RawPDU rawType(data);
+				Tins::RawPDU rawType(data) ;
 				if(tcp.inner_pdu() != NULL && tcp.inner_pdu()->pdu_type() == rawType.pdu_type())
 				{
 					const RawPDU & raw = tcp.rfind_pdu<RawPDU>();	
@@ -428,7 +428,7 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 				const TCP & tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
 
 				std::string data("test");
-				RawPDU::RawPDU rawType(data);
+				Tins::RawPDU rawType(data);
 				if(tcp.inner_pdu() != NULL && tcp.inner_pdu()->pdu_type() == rawType.pdu_type())
 				{
 					const RawPDU & raw = tcp.rfind_pdu<RawPDU>();	
@@ -477,13 +477,187 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
     return LIBRARY_NO_ERROR;
 }
 
-EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
-{
-	int packet_id = (int) MArgument_getInteger(Args[0]);
+// EXTERN_C DLLEXPORT int GetPacketProtocolName(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+// {
+// 	int packet_id = (int) MArgument_getInteger(Args[0]);
 
-	Packet * packet = hash_table[packet_id];
-	return 0;
-	// packet->getProtocolName();
+// 	Packet * packet = hash_table[packet_id];
+// 	return 0;
+// 	// packet->getProtocolName();
+// }
+
+
+bool udpSniff(const PDU &pdu) 
+{
+	//make a clone of the pdu and store it into the hash table
+    continuousPacketTable[nextPacketID++] = pdu.clone();
+    return keepRunning;
+}
+
+void udp_sniff_thread(std::string interface, WolframLibraryData libData)
+{
+	//now make the sniffer object
+	try
+	{
+		Sniffer snifferObject(interface);
+		snifferObject.sniff_loop(udpSniff);
+
+	}
+	catch(...)
+	{
+		libData->evaluateExpression(libData,"Print[\"failed to open interface\"]",6,0,NULL);
+		return;
+	}
+}
+
+EXTERN_C DLLEXPORT int StartUDPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	//the first argument is the interface to sniff on
+	std::string interface(MArgument_getUTF8String(Args[0]));
+
+	//mark the thread as start running
+	keepRunning = true;
+
+	//start the sniffer in a background thread
+	t = std::thread(udp_sniff_thread,interface,libData);
+
+	t.detach();
+
+	return LIBRARY_NO_ERROR;
+
 }
 
 
+EXTERN_C DLLEXPORT int StopUDPSniffing(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	//just mark the thread to stop running
+	keepRunning = false;
+
+	if(t.joinable())
+	{
+		t.join();
+	}
+
+	return LIBRARY_NO_ERROR;
+}
+
+EXTERN_C DLLEXPORT int EmptyUDPSniffingHashTable(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
+{
+	MTensor returnTensor;
+	mint dims = 0;
+	int numPackets = 0;
+
+	//loop over the packets to determine how big of an MTensor we need
+	for (int x = 0; x < continuousPacketTable.size(); x++) 
+	{
+		//check if this packet is ip
+		const Tins::IP ipType;
+		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		{
+			//check if this packet is tcp
+			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const Tins::UDP udpType;
+			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == udpType.pdu_type())
+			{
+				//it's tcp so get the raw packet for accessing the payload
+				const UDP & udp = continuousPacketTable[x]->rfind_pdu<UDP>();
+
+				std::string data("test");
+				Tins::RawPDU rawType(data);
+				if(udp.inner_pdu() != NULL && udp.inner_pdu()->pdu_type() == rawType.pdu_type())
+				{
+					const RawPDU & raw = udp.rfind_pdu<RawPDU>();	
+
+					std::stringstream ss;
+
+					ss << ip.src_addr() << ":" << udp.sport() << "to" << ip.dst_addr() << ":" << udp.dport() << "checksum" << udp.checksum() << "length" << udp.length() << "headersize" << udp.header_size();
+
+					std::string s = ss.str();
+
+					// the +1 for the size prepended to the packet (which is the length of the string + payload)
+					//the additional +1 is for the null byte appended at the end of the stream
+					//and the final additional +1 is for the string length embedded right after the total length, before the string
+					dims += 3 + s.length() + raw.payload().size();
+
+					numPackets++;
+				}
+			}
+		}
+	}
+
+	//increment the dimensions by the number of packets we are returning
+	dims += numPackets;
+
+	//allocate the tensor
+	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
+	if(error) return error;
+
+	//initially, we start at the beggining
+	mint TensorPosition = 1;
+
+
+
+	//now start looping over the packets again, adding them to the mtensor
+	for (int x = 0; x < continuousPacketTable.size(); x++) {
+		//check if this packet is ip
+		const Tins::IP ipType;
+		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		{
+			//check if this packet is tcp
+			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const Tins::UDP udpType;
+			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == udpType.pdu_type())
+			{
+				//it's tcp so get the raw packet for accessing the payload
+				const UDP & udp = continuousPacketTable[x]->rfind_pdu<UDP>();
+
+				std::string data("test");
+				Tins::RawPDU rawType(data);
+				if(udp.inner_pdu() != NULL && udp.inner_pdu()->pdu_type() == rawType.pdu_type())
+				{
+					const RawPDU & raw = udp.rfind_pdu<RawPDU>();	
+
+					std::stringstream ss;
+
+					ss << ip.src_addr() << ":" << udp.sport() << "to" << ip.dst_addr() << ":" << udp.dport() << "checksum" << udp.checksum() << "length" << udp.length() << "headersize" << udp.header_size();
+
+					std::string s = ss.str();
+
+					mint totalSize = 1 + s.length() + raw.payload().size();
+
+					//get the length of this interface string
+					mint strLength = s.length();
+					if(error) return error;
+
+					libData->MTensor_setInteger(returnTensor,&TensorPosition, totalSize);
+					//don't forget to increment tensor position
+					TensorPosition++;
+
+					libData->MTensor_setInteger(returnTensor,&TensorPosition, s.length());
+					//don't forget to increment tensor position
+					TensorPosition++;
+
+					//now copy all of the characters from the string into the mtensor
+					for(mint charIndex = 0; charIndex < strLength; charIndex++)
+					{
+						int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,s[charIndex]);
+						TensorPosition++;
+						if(error) return error;
+					}
+
+					for(mint idex = 0; idex < raw.payload().size(); idex ++)
+					{
+						int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,raw.payload()[idex]);
+						if(error) return error;
+						TensorPosition++;
+					}
+				}
+			}
+		}
+	}	
+
+	//return the tensor
+    MArgument_setMTensor(Result,returnTensor);
+
+    return LIBRARY_NO_ERROR;
+}
