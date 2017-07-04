@@ -359,86 +359,117 @@ EXTERN_C DLLEXPORT int StopTCPSniffing(WolframLibraryData libData, mint Argc, MA
 
 EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument Result)
 {
-
 	MTensor returnTensor;
 	mint dims = 0;
+	int numPackets = 0;
 
+	//loop over the packets to determine how big of an MTensor we need
+	for (int x = 0; x < continuousPacketTable.size(); x++) 
+	{
+		//check if this packet is ip
+		const Tins::IP ipType;
+		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		{
+			//check if this packet is tcp
+			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const Tins::TCP tcpType;
+			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == tcpType.pdu_type())
+			{
+				//it's tcp so get the raw packet for accessing the payload
+				const TCP & tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
 
-	for (int i = 0; i< continuousPacketTable.size(); i++){
+				std::string data("test");
+				RawPDU::RawPDU rawType(data);
+				if(tcp.inner_pdu() != NULL && tcp.inner_pdu()->pdu_type() == rawType.pdu_type())
+				{
+					const RawPDU & raw = tcp.rfind_pdu<RawPDU>();	
 
-		const IP &ip = continuousPacketTable[i]->rfind_pdu<IP>();
-		const TCP &tcp = continuousPacketTable[i]->rfind_pdu<TCP>();
-		const RawPDU& raw = tcp.rfind_pdu<RawPDU>(PDU::TCP);
-		
+					std::stringstream ss;
 
-		// char * test = new char[raw.payload().size()];
+					ss << ip.src_addr() << ":" << tcp.sport() << "to" << ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags()<< "headersize" << tcp.header_size();
 
-		// std::copy(raw.payload().begin(), raw.payload().end(), test);
-		// std::string payload (test);	
-				// std::string payload(raw.payload()->begin(), raw.payload()->end());
+					std::string s = ss.str();
 
-		std::stringstream ss;
+					// the +1 for the size prepended to the packet (which is the length of the string + payload)
+					//the additional +1 is for the null byte appended at the end of the stream
+					//and the final additional +1 is for the string length embedded right after the total length, before the string
+					dims += 3 + s.length() + raw.payload().size();
 
-		ss << ip.src_addr() << ":" << tcp.sport() << "to" << ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags()<< "headersize" << tcp.header_size();
+					numPackets++;
+				}
+			}
+		}
+	}
 
-		std::string s = ss.str();
+	//increment the dimensions by the number of packets we are returning
+	dims += numPackets;
 
-		// the +1 for the size prepended to the packet (which is the length of the string + payload)
-		dims += 1 + s.length() + raw.payload().size();
-	}	
-
+	//allocate the tensor
 	int error = libData->MTensor_new(MType_Integer,1,&dims,&returnTensor);
 	if(error) return error;
 
-
-
+	//initially, we start at the beggining
 	mint TensorPosition = 1;
 
 
 
-
+	//now start looping over the packets again, adding them to the mtensor
 	for (int x = 0; x < continuousPacketTable.size(); x++) {
-
-		const IP &ip = continuousPacketTable[x]->rfind_pdu<IP>();
-		const TCP &tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
-		const RawPDU& raw = tcp.rfind_pdu<RawPDU>();
-		// const RawPDU::payload_type& payload = raw.payload();
-		// char * test = new char[raw.payload().size()];
-
-		// std::copy(raw.payload().begin(), raw.payload().end(), test);
-		// std::string payload (test);
-		// std::string payload(raw.payload()->begin(), raw.payload()->end());
-		std::stringstream ss;
-		ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags() << "headersize" << tcp.header_size();
-		std::string s = ss.str();
-
-		mint totalSize = s.length() + raw.payload().size();
-
-
-			//get the length of this interface string
-			mint strLength = s.length();
-			if(error) return error;
-
-			libData->MTensor_setInteger(returnTensor,&TensorPosition, totalSize);
-			//don't forget to increment tensor position
-			TensorPosition++;
-
-			//now copy all of the characters from the string into the mtensor
-			for(mint charIndex = 0; charIndex < strLength; charIndex++)
+		//check if this packet is ip
+		const Tins::IP ipType;
+		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		{
+			//check if this packet is tcp
+			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const Tins::TCP tcpType;
+			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == tcpType.pdu_type())
 			{
-				int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,s[charIndex]);
-				if(error) return error;
-				TensorPosition++;
+				//it's tcp so get the raw packet for accessing the payload
+				const TCP & tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
+
+				std::string data("test");
+				RawPDU::RawPDU rawType(data);
+				if(tcp.inner_pdu() != NULL && tcp.inner_pdu()->pdu_type() == rawType.pdu_type())
+				{
+					const RawPDU & raw = tcp.rfind_pdu<RawPDU>();	
+
+					std::stringstream ss;
+
+					ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags() << "headersize" << tcp.header_size();
+					std::string s = ss.str();
+
+					mint totalSize = 1 + s.length() + raw.payload().size();
+
+					//get the length of this interface string
+					mint strLength = s.length();
+					if(error) return error;
+
+					libData->MTensor_setInteger(returnTensor,&TensorPosition, totalSize);
+					//don't forget to increment tensor position
+					TensorPosition++;
+
+					libData->MTensor_setInteger(returnTensor,&TensorPosition, s.length());
+					//don't forget to increment tensor position
+					TensorPosition++;
+
+					//now copy all of the characters from the string into the mtensor
+					for(mint charIndex = 0; charIndex < strLength; charIndex++)
+					{
+						int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,s[charIndex]);
+						TensorPosition++;
+						if(error) return error;
+					}
+
+					for(mint idex = 0; idex < raw.payload().size(); idex ++)
+					{
+						int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,raw.payload()[idex]);
+						if(error) return error;
+						TensorPosition++;
+					}
+				}
 			}
-
-			for(mint idex = 0; idex < raw.payload().size(); idex ++){
-
-				int error = libData->MTensor_setInteger(returnTensor,&TensorPosition,raw.payload()[idex]);
-				if(error) return error;
-				TensorPosition++;
-			}
-
 		}
+	}	
 
 	//return the tensor
     MArgument_setMTensor(Result,returnTensor);
