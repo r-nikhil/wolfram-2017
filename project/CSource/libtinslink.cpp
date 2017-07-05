@@ -6,6 +6,7 @@
 #include "WolframLibrary.h"
 
 #include <map>
+#include <utility>
 #include <atomic>
 #include <future>
 #include <vector>
@@ -16,7 +17,9 @@ using namespace Tins;
 std::map<int,Packet * > hash_table = std::map<int,Packet *>();
 
 //packetID for individual packet reading
-static int currentPacketID = 0;
+static int currentPacketIDTCP = 0;
+static int currentPacketIDUDP = 0;
+static int currentPacketIDIndividual = 0;
 
 
 
@@ -27,9 +30,12 @@ std::atomic<int> nextPacketID(0);
 std::atomic<bool> keepRunning(true);
 
 //map of all the packets gathered inside the background thread
-std::map<int,PDU *> continuousPacketTable = std::map<int,PDU *>();
+std::map<int,std::pair<Timestamp,PDU *> > continuousPacketTableTCP = std::map<int,std::pair<Timestamp,PDU *> >();
+
+std::map<int,std::pair<Timestamp,PDU *> > continuousPacketTableUDP = std::map<int,std::pair<Timestamp,PDU *> >();
 
 
+std::map<int,PDU *> continuousPacketTableDNS = std::map<int,PDU *>();
 
 
 EXTERN_C DLLEXPORT mint WolframLibrary_getVersion()
@@ -80,9 +86,9 @@ int sniffeth_internal(int ms, char * interface, int port, char * ipaddress)
 	// Retrieve the next packet.
 	Packet packet = snifferObject.next_packet();
 	
-	currentPacketID++;
+	currentPacketIDIndividual++;
 
-	hash_table[currentPacketID] = &packet;
+	hash_table[currentPacketIDIndividual] = &packet;
 
 	// //try to find the IP packet internally for this PDU
 	// if(packet.pdu()->find_pdu<IP>())
@@ -90,7 +96,7 @@ int sniffeth_internal(int ms, char * interface, int port, char * ipaddress)
 	// 	time = packet.timestamp().seconds();	
 	// }
 
-	return currentPacketID;
+	return currentPacketIDIndividual;
 }
 
 
@@ -192,7 +198,7 @@ bool dnsSniff(const PDU &pdu)
 {
 	//make a clone of the pdu and store it into the hash table
 
-    continuousPacketTable[nextPacketID++] = pdu.clone();
+    continuousPacketTableDNS[nextPacketID++] = pdu.clone();
     return keepRunning;
 }
 
@@ -205,9 +211,9 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 	mint dims = 0;
 
 
-	for (int i = 0; i< continuousPacketTable.size(); i++){
+	for (int i = 0; i< continuousPacketTableDNS.size(); i++){
 
-		DNS dns = continuousPacketTable[i]->rfind_pdu<RawPDU>().to<DNS>();
+		DNS dns = continuousPacketTableDNS[i]->rfind_pdu<RawPDU>().to<DNS>();
 
 		for (const auto& query : dns.queries()) {
 
@@ -226,8 +232,8 @@ EXTERN_C DLLEXPORT int EmptyDNSSniffingHashTable(WolframLibraryData libData, min
 
 
 	mint TensorPosition = 1;
-	for (int x = 0; x<continuousPacketTable.size(); x++) {
-		DNS dns = continuousPacketTable[x]->rfind_pdu<RawPDU>().to<DNS>();
+	for (int x = 0; x<continuousPacketTableDNS.size(); x++) {
+		DNS dns = continuousPacketTableDNS[x]->rfind_pdu<RawPDU>().to<DNS>();
 
 
 		for (const auto& query : dns.queries()) {
@@ -303,10 +309,11 @@ EXTERN_C DLLEXPORT int stopDNSSniff(WolframLibraryData libData, mint Argc, MArgu
 	return LIBRARY_NO_ERROR;
 
 }
-bool tcpSniff(const PDU &pdu) 
+
+bool tcpSniff(const Packet &pkt) 
 {
 	//make a clone of the pdu and store it into the hash table
-    continuousPacketTable[nextPacketID++] = pdu.clone();
+    continuousPacketTableTCP[currentPacketIDTCP++] = std::make_pair(pkt.timestamp(),pkt.pdu()->clone());
     return keepRunning;
 }
 
@@ -316,8 +323,9 @@ void tcp_sniff_thread(std::string interface, WolframLibraryData libData)
 	try
 	{
 		Sniffer snifferObject(interface);
-		snifferObject.sniff_loop(tcpSniff);
-
+		while (Packet pkt = snifferObject.next_packet()) {
+             tcpSniff(pkt);
+        }
 	}
 	catch(...)
 	{
@@ -364,19 +372,19 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 	int numPackets = 0;
 
 	//loop over the packets to determine how big of an MTensor we need
-	for (int x = 0; x < continuousPacketTable.size(); x++) 
+	for (int x = 0; x < continuousPacketTableTCP.size(); x++) 
 	{
 		//check if this packet is ip
 		const Tins::IP ipType;
-		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		if(continuousPacketTableTCP[x].second->inner_pdu() != NULL && continuousPacketTableTCP[x].second->inner_pdu()->pdu_type() == ipType.pdu_type())
 		{
 			//check if this packet is tcp
-			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const IP & ip = continuousPacketTableTCP[x].second->rfind_pdu<IP>();
 			const Tins::TCP tcpType;
 			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == tcpType.pdu_type())
 			{
 				//it's tcp so get the raw packet for accessing the payload
-				const TCP & tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
+				const TCP & tcp = continuousPacketTableTCP[x].second->rfind_pdu<TCP>();
 
 				std::string data("test");
 				Tins::RawPDU rawType(data) ;
@@ -386,7 +394,16 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 					std::stringstream ss;
 
-					ss << ip.src_addr() << ":" << tcp.sport() << "to" << ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags()<< "headersize" << tcp.header_size();
+					ss << ip.src_addr() << ":" << 
+					tcp.sport() << "to" << ip.dst_addr() << 
+					":" << tcp.dport() << "seq" << tcp.seq() << 
+					"ack_seq" << tcp.ack_seq() << "window" << 
+					tcp.window() << "checksum" << tcp.checksum() << 
+					"urgentpointer" << tcp.urg_ptr() << "dataoffset" << 
+					tcp.data_offset() << "flags" << tcp.flags() << 
+					"headersize" << tcp.header_size() <<
+					"ts" << continuousPacketTableTCP[x].first.seconds() << 
+					"tus" << continuousPacketTableTCP[x].first.microseconds();
 
 					std::string s = ss.str();
 
@@ -414,18 +431,18 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 
 	//now start looping over the packets again, adding them to the mtensor
-	for (int x = 0; x < continuousPacketTable.size(); x++) {
+	for (int x = 0; x < continuousPacketTableTCP.size(); x++) {
 		//check if this packet is ip
 		const Tins::IP ipType;
-		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		if(continuousPacketTableTCP[x].second->inner_pdu() != NULL && continuousPacketTableTCP[x].second->inner_pdu()->pdu_type() == ipType.pdu_type())
 		{
 			//check if this packet is tcp
-			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const IP & ip = continuousPacketTableTCP[x].second->rfind_pdu<IP>();
 			const Tins::TCP tcpType;
 			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == tcpType.pdu_type())
 			{
 				//it's tcp so get the raw packet for accessing the payload
-				const TCP & tcp = continuousPacketTable[x]->rfind_pdu<TCP>();
+				const TCP & tcp = continuousPacketTableTCP[x].second->rfind_pdu<TCP>();
 
 				std::string data("test");
 				Tins::RawPDU rawType(data);
@@ -435,7 +452,9 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 
 					std::stringstream ss;
 
-					ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags() << "headersize" << tcp.header_size();
+					ss << ip.src_addr() << ":" << tcp.sport() << " to " <<ip.dst_addr() << ":" << tcp.dport() << "seq" << tcp.seq() << "ack_seq" << tcp.ack_seq() << "window" << tcp.window() << "checksum" << tcp.checksum() << "urgentpointer" << tcp.urg_ptr() << "dataoffset" << tcp.data_offset() << "flags" << tcp.flags() << "headersize" << tcp.header_size() <<
+					"ts" << continuousPacketTableTCP[x].first.seconds() << 
+					"tus" << continuousPacketTableTCP[x].first.microseconds();;
 					std::string s = ss.str();
 
 					mint totalSize = 1 + s.length() + raw.payload().size();
@@ -487,10 +506,10 @@ EXTERN_C DLLEXPORT int EmptyTCPSniffingHashTable(WolframLibraryData libData, min
 // }
 
 
-bool udpSniff(const PDU &pdu) 
+bool udpSniff(Packet & pkt) 
 {
 	//make a clone of the pdu and store it into the hash table
-    continuousPacketTable[nextPacketID++] = pdu.clone();
+    continuousPacketTableUDP[currentPacketIDUDP++] = std::make_pair(pkt.timestamp(),pkt.pdu()->clone());
     return keepRunning;
 }
 
@@ -500,8 +519,9 @@ void udp_sniff_thread(std::string interface, WolframLibraryData libData)
 	try
 	{
 		Sniffer snifferObject(interface);
-		snifferObject.sniff_loop(udpSniff);
-
+		while (Packet pkt = snifferObject.next_packet()) {
+             udpSniff(pkt);
+        }
 	}
 	catch(...)
 	{
@@ -548,19 +568,19 @@ EXTERN_C DLLEXPORT int EmptyUDPSniffingHashTable(WolframLibraryData libData, min
 	int numPackets = 0;
 
 	//loop over the packets to determine how big of an MTensor we need
-	for (int x = 0; x < continuousPacketTable.size(); x++) 
+	for (int x = 0; x < continuousPacketTableUDP.size(); x++) 
 	{
 		//check if this packet is ip
 		const Tins::IP ipType;
-		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		if(continuousPacketTableUDP[x].second->inner_pdu() != NULL && continuousPacketTableUDP[x].second->inner_pdu()->pdu_type() == ipType.pdu_type())
 		{
 			//check if this packet is tcp
-			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const IP & ip = continuousPacketTableUDP[x].second->rfind_pdu<IP>();
 			const Tins::UDP udpType;
 			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == udpType.pdu_type())
 			{
 				//it's tcp so get the raw packet for accessing the payload
-				const UDP & udp = continuousPacketTable[x]->rfind_pdu<UDP>();
+				const UDP & udp = continuousPacketTableUDP[x].second->rfind_pdu<UDP>();
 
 				std::string data("test");
 				Tins::RawPDU rawType(data);
@@ -598,18 +618,18 @@ EXTERN_C DLLEXPORT int EmptyUDPSniffingHashTable(WolframLibraryData libData, min
 
 
 	//now start looping over the packets again, adding them to the mtensor
-	for (int x = 0; x < continuousPacketTable.size(); x++) {
+	for (int x = 0; x < continuousPacketTableUDP.size(); x++) {
 		//check if this packet is ip
 		const Tins::IP ipType;
-		if(continuousPacketTable[x]->inner_pdu() != NULL && continuousPacketTable[x]->inner_pdu()->pdu_type() == ipType.pdu_type())
+		if(continuousPacketTableUDP[x].second->inner_pdu() != NULL && continuousPacketTableUDP[x].second->inner_pdu()->pdu_type() == ipType.pdu_type())
 		{
 			//check if this packet is tcp
-			const IP & ip = continuousPacketTable[x]->rfind_pdu<IP>();
+			const IP & ip = continuousPacketTableUDP[x].second->rfind_pdu<IP>();
 			const Tins::UDP udpType;
 			if(ip.inner_pdu() != NULL && ip.inner_pdu()->pdu_type() == udpType.pdu_type())
 			{
 				//it's tcp so get the raw packet for accessing the payload
-				const UDP & udp = continuousPacketTable[x]->rfind_pdu<UDP>();
+				const UDP & udp = continuousPacketTableUDP[x].second->rfind_pdu<UDP>();
 
 				std::string data("test");
 				Tins::RawPDU rawType(data);
