@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    398427,       6956]
-NotebookOptionsPosition[     81309,       1525]
-NotebookOutlinePosition[    394110,       6859]
-CellTagsIndexPosition[    393814,       6847]
+NotebookDataLength[    409559,       7276]
+NotebookOptionsPosition[     91324,       1815]
+NotebookOutlinePosition[    404125,       7149]
+CellTagsIndexPosition[    403829,       7137]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1202,9 +1202,24 @@ Cell[TextData[{
    3.7081072179304457`*^9},ExpressionUUID->"2d847a34-66d2-4516-b974-\
 ff32b660a5bf"],
 
-Cell["", "Text",
- CellChangeTimes->{{3.708110518054635*^9, 
-  3.70811052768685*^9}},ExpressionUUID->"0746cc05-9ff2-4dea-862b-\
+Cell["\<\
+Packet Sniffing
+\tNew Mathematica Function
+\tBackend C++ Library -> Libtins
+\tLibraryLink Interface
+\tSupport for TCP/UDP
+\tNetwork Debugging
+Check response times for a requests to a particular domain, a particular ip \
+or even a particular port. With Mathematica\[CloseCurlyQuote]s advance \
+plotting features it\[CloseCurlyQuote]s very easy to visualise the erroneous \
+packet.
+\t
+\t\
+\>", "Text",
+ CellChangeTimes->{{3.708110518054635*^9, 3.70811052768685*^9}, {
+  3.7082484331725874`*^9, 3.7082485659951134`*^9}, {3.708250740377903*^9, 
+  3.708250813647892*^9}, {3.708250869141263*^9, 
+  3.7082509393067007`*^9}},ExpressionUUID->"0746cc05-9ff2-4dea-862b-\
 2a8fdc8e7d89"]
 }, Open  ]],
 
@@ -1379,11 +1394,25 @@ Cell["Detailed Records of the Project", "TemplateSection",
   3.7080962536504707`*^9}},ExpressionUUID->"ba97f0a3-c165-451d-bf4c-\
 74c0b4a4f36e"],
 
+Cell[CellGroupData[{
+
 Cell["Main Results in Detail", "TemplateSubsection",
  CellChangeTimes->{{3.549542055118816*^9, 3.5495420583168*^9}, {
   3.708095979852994*^9, 3.708095983809194*^9}, {3.70809609386517*^9, 
   3.708096094077529*^9}},ExpressionUUID->"a4e3d008-4eb0-4d8e-bed7-\
 33623658821c"],
+
+Cell["\<\
+Functions which print out TCP, UDP, DNS data were added on the Mathematica \
+side which use the \"libtins\" C++ library on the backend. The entire TCP/UDP \
+packet is serialized and sent to Mathematica where it's parsed. Fields \
+returned inside Source/Destination IP/Port, Checksum, Length, Headersize, ack \
+,timestamp etc.\
+\>", "Text",
+ CellChangeTimes->{
+  3.7082487587339993`*^9},ExpressionUUID->"c265d756-9f67-45b6-b31b-\
+5eaa11f459c4"]
+}, Closed]],
 
 Cell[CellGroupData[{
 
@@ -1399,22 +1428,26 @@ Cell["Provide one of:", "TemplateComment",
 
 Cell[CellGroupData[{
 
-Cell["Link to the GitHub", "Item",
- CellChangeTimes->{{3.7080963065367527`*^9, 
-  3.708096309577277*^9}},ExpressionUUID->"66883a1c-6bbf-428e-84bc-\
+Cell["https://github.com/rnikhil275/wolfram-2017", "Item",
+ CellChangeTimes->{{3.7080963065367527`*^9, 3.708096309577277*^9}, {
+  3.708248716808575*^9, 
+  3.70824872563313*^9}},ExpressionUUID->"66883a1c-6bbf-428e-84bc-\
 a7c0ba375299"],
 
-Cell["Explicit code", "Item",
- CellChangeTimes->{{3.708096312466115*^9, 
-  3.7080963343962107`*^9}},ExpressionUUID->"7c9362c5-ee46-4875-bc37-\
+Cell["", "Item",
+ CellChangeTimes->{{3.708096312466115*^9, 3.7080963343962107`*^9}, {
+  3.7082487102983637`*^9, 
+  3.7082487117335663`*^9}},ExpressionUUID->"7c9362c5-ee46-4875-bc37-\
 652189adc85e"]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 
 Cell["Written Content / Lesson Plans", "TemplateSubsection",
  CellChangeTimes->{{3.708096199547399*^9, 
   3.708096214681534*^9}},ExpressionUUID->"a55786c3-e7a6-4cf3-bb54-\
 b05532239df1"],
+
+Cell[CellGroupData[{
 
 Cell["Conclusions in Detail", "TemplateSubsection",
  CellChangeTimes->{{3.549547456866158*^9, 3.549547459278479*^9}, 
@@ -1422,11 +1455,239 @@ Cell["Conclusions in Detail", "TemplateSubsection",
    3.70809609806956*^9}},ExpressionUUID->"5a247b12-4033-40a4-960f-\
 65d46bf0f9c2"],
 
+Cell["\<\
+The added functions can be used to capture and analyze network data for TCP \
+and UDP protocols in near real time.\
+\>", "Text",
+ CellChangeTimes->{{3.708248790375658*^9, 
+  3.7082488254970245`*^9}},ExpressionUUID->"97e67834-d928-4b1f-9294-\
+830ffc4b00ce"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
 Cell["All Visualizations", "TemplateSubsection",
  CellChangeTimes->{{3.5495421749322853`*^9, 3.5495421791841507`*^9}, {
-  3.7080959928646717`*^9, 3.708095994448739*^9}, {3.708096104617906*^9, 
-  3.708096104865819*^9}},ExpressionUUID->"f27ae70e-91c7-4506-8835-\
+   3.7080959928646717`*^9, 3.708095994448739*^9}, {3.708096104617906*^9, 
+   3.708096104865819*^9}, 
+   3.7082488148172054`*^9},ExpressionUUID->"f27ae70e-91c7-4506-8835-\
 21b281190700"],
+
+Cell["Time vs Destination IP\[CloseCurlyQuote]s", "Text",
+ CellChangeTimes->{{3.708248876819023*^9, 
+  3.7082489016664686`*^9}},ExpressionUUID->"07eff70d-bbf9-4839-a6cd-\
+cf9be70515ef"],
+
+Cell[BoxData[
+ GraphicsBox[{
+   {RGBColor[0.987148, 0.8073604000000001, 0.49470040000000004`], EdgeForm[{
+    Opacity[0.6579999999999999], Thickness[Small]}], {}, 
+    {RGBColor[0.987148, 0.8073604000000001, 0.49470040000000004`], EdgeForm[{
+     Opacity[0.6579999999999999], Thickness[Small]}], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          
+          RectangleBox[{3.708193531536*^9, 0}, {3.7081935630719995`*^9, 3.}, 
+           "RoundingRadius" -> 0]},
+         ImageSizeCache->{{21.08333396911621, 100.75}, {55.778712038446244`, 
+          87.87784554565492}}],
+        StatusArea[#, 3]& ,
+        TagBoxNote->"3"],
+       StyleBox["3", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[3, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          
+          RectangleBox[{3.7081935630719995`*^9, 0}, {3.7081935946079993`*^9, 
+           18.}, "RoundingRadius" -> 0]},
+         ImageSizeCache->{{100.25, 
+          179.91666793823242`}, {-102.21695549759711`, 87.87784554565492}}],
+        StatusArea[#, 18]& ,
+        TagBoxNote->"18"],
+       StyleBox["18", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[18, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          
+          RectangleBox[{3.7081935946079993`*^9, 0}, {3.708193626143999*^9, 
+           10.}, "RoundingRadius" -> 0]},
+         ImageSizeCache->{{179.41666793823242`, 
+          259.0833339691162}, {-17.952599478373983`, 87.87784554565492}}],
+        StatusArea[#, 10]& ,
+        TagBoxNote->"10"],
+       StyleBox["10", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[10, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          
+          RectangleBox[{3.708193626143999*^9, 0}, {3.708193657679999*^9, 16.},
+            "RoundingRadius" -> 0]},
+         ImageSizeCache->{{258.5833339691162, 338.25}, {-81.15086649279134, 
+          87.87784554565492}}],
+        StatusArea[#, 16]& ,
+        TagBoxNote->"16"],
+       StyleBox["16", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[16, {}], "Tooltip"]& ]}, {}, {}}, {{}, {}, {}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{None, None},
+  AxesOrigin->{3.7081935290131197`*^9, 0},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameTicks->{{Automatic, Automatic}, {{{3.708193531536*^9, 
+       FormBox["\"21:45:31\"", TraditionalForm], {0, 0.01}}, {
+      3.7081935630719995`*^9, 
+       FormBox["\"21:46:03\"", TraditionalForm], {0, 0.01}}, {
+      3.7081935946079993`*^9, 
+       FormBox["\"21:46:34\"", TraditionalForm], {0, 0.01}}, {
+      3.708193626143999*^9, 
+       FormBox["\"21:47:06\"", TraditionalForm], {0, 0.01}}, {
+      3.708193657679999*^9, 
+       FormBox["\"21:47:37\"", TraditionalForm], {0, 0.01}}}, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  PlotRange->{{3.708193531536*^9, 3.708193657679999*^9}, {All, All}},
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.02], 
+     Scaled[0.05]}},
+  Ticks->{{{3.708193531536*^9, 
+      FormBox["\"21:45:31\"", TraditionalForm], {0, 0.01}}, {
+     3.7081935630719995`*^9, 
+      FormBox["\"21:46:03\"", TraditionalForm], {0, 0.01}}, {
+     3.7081935946079993`*^9, 
+      FormBox["\"21:46:34\"", TraditionalForm], {0, 0.01}}, {
+     3.708193626143999*^9, 
+      FormBox["\"21:47:06\"", TraditionalForm], {0, 0.01}}, {
+     3.708193657679999*^9, 
+      FormBox["\"21:47:37\"", TraditionalForm], {0, 0.01}}}, 
+    Automatic}]], "Input",
+ CellChangeTimes->{
+  3.7082488680426064`*^9},ExpressionUUID->"7324cf5e-b6e6-4ec9-83b6-\
+baffe0eddcef"],
+
+Cell["Source IP vs Payload", "Text",
+ CellChangeTimes->{{3.708248908237282*^9, 
+  3.708248921921707*^9}},ExpressionUUID->"ea0d1449-eec3-4114-be90-\
+9fb5324d532e"],
+
+Cell[BoxData[
+ GraphicsBox[{
+   {RGBColor[0.987148, 0.8073604000000001, 0.49470040000000004`], EdgeForm[{
+    Opacity[0.6579999999999999], Thickness[Small]}], {}, 
+    {RGBColor[0.987148, 0.8073604000000001, 0.49470040000000004`], EdgeForm[{
+     Opacity[0.6579999999999999], Thickness[Small]}], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          RectangleBox[{0., 0}, {20., 20.}, "RoundingRadius" -> 0]},
+         ImageSizeCache->{{21.35048038430745, 
+          104.35648518815051`}, {-58.52858575580268, 93.96535391600992}}],
+        StatusArea[#, 20]& ,
+        TagBoxNote->"20"],
+       StyleBox["20", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[20, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          RectangleBox[{20., 0}, {40., 4.}, "RoundingRadius" -> 0]},
+         ImageSizeCache->{{103.85648518815051`, 186.86248999199358`}, {
+          63.0665659816474, 93.96535391600992}}],
+        StatusArea[#, 4]& ,
+        TagBoxNote->"4"],
+       StyleBox["4", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[4, {}], "Tooltip"]& ], 
+     TagBox[
+      TooltipBox[
+       TagBox[
+        DynamicBox[{
+          FEPrivate`If[
+           CurrentValue["MouseOver"], 
+           EdgeForm[{
+             GrayLevel[0.5], 
+             AbsoluteThickness[1.5], 
+             Opacity[0.66]}], {}, {}], 
+          RectangleBox[{60., 0}, {80., 26.}, "RoundingRadius" -> 0]},
+         ImageSizeCache->{{268.8684947958367, 
+          351.8744995996797}, {-104.12676765734645`, 93.96535391600992}}],
+        StatusArea[#, 26]& ,
+        TagBoxNote->"26"],
+       StyleBox["26", {}, StripOnInput -> False]],
+      Annotation[#, 
+       Style[26, {}], "Tooltip"]& ]}, {}, {}}, {{}, {}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{None, None},
+  AxesOrigin->{-1.6, 0},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  PlotRange->{{0., 80.}, {All, All}},
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.02], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Input",ExpressionUUID->"5e32008f-b369-\
+47db-a3d2-00348f3d3aa1"]
+}, Open  ]],
+
+Cell[CellGroupData[{
 
 Cell["Data Sources Links/References", "TemplateSubsection",
  CellChangeTimes->{{3.708096132224304*^9, 3.708096148950604*^9}, {
@@ -1434,11 +1695,27 @@ Cell["Data Sources Links/References", "TemplateSubsection",
  CellTags->
   "DataSources",ExpressionUUID->"595aec4a-a293-426a-b50c-4acce4123cb2"],
 
+Cell["", "Text",ExpressionUUID->"8bc5af05-f95e-4bd8-8907-73b58c21e10c"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
 Cell["Future Directions", "TemplateSubsection",
  CellChangeTimes->{{3.549548005988791*^9, 3.5495480110025587`*^9}, {
    3.707836737195241*^9, 3.707836742473217*^9}, 3.707836774328553*^9},
  CellTags->
   "FutureDirections",ExpressionUUID->"e5647c6a-cb6b-4235-8887-8cfbb24ef769"],
+
+Cell["\<\
+Make the functions real time so that Mathematica can capture and analyze \
+packets on the fly.\
+\>", "Text",
+ CellChangeTimes->{{3.7082486391719246`*^9, 
+  3.7082486589680614`*^9}},ExpressionUUID->"8c111310-46dc-4cfc-921a-\
+a848e06cd50f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
 
 Cell["Background Info Links/References", "TemplateSubsection",
  CellChangeTimes->{{3.549542073628705*^9, 3.5495420746677647`*^9}, {
@@ -1446,6 +1723,18 @@ Cell["Background Info Links/References", "TemplateSubsection",
   3.7080961599500628`*^9}},
  CellTags->
   "References",ExpressionUUID->"f66f7ca2-dcb9-4c06-9d0a-f2cc48d9fd79"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Libtins", "-"}], ">", 
+   RowBox[{"http", ":"}]}], "//", 
+  RowBox[{
+   RowBox[{"libtins", ".", "github", ".", "io"}], "/"}]}]], "Input",
+ CellChangeTimes->{{3.70824861221222*^9, 3.708248635100317*^9}, 
+   3.7082486712615843`*^9},ExpressionUUID->"265f22ec-5756-4a5e-a350-\
+7445ac487416"]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -1461,15 +1750,16 @@ Cell["Provide keywords as items", "TemplateComment",
 
 Cell[CellGroupData[{
 
-Cell["< keyword 1 >", "Item",
+Cell["packet capture", "Item",
  CellChangeTimes->{{3.708096350583043*^9, 3.7080963544862823`*^9}, {
-  3.708113540381196*^9, 
-  3.708113546129714*^9}},ExpressionUUID->"3b9a0db3-df49-4532-b956-\
+  3.708113540381196*^9, 3.708113546129714*^9}, {3.708248950549389*^9, 
+  3.708248971052026*^9}},ExpressionUUID->"3b9a0db3-df49-4532-b956-\
 8ec2c42dd8bf"],
 
-Cell["< keyword 2 >", "Item",
- CellChangeTimes->{{3.708096350583043*^9, 
-  3.7080963563232718`*^9}},ExpressionUUID->"acccdba7-4cc8-463f-9532-\
+Cell["libtins", "Item",
+ CellChangeTimes->{{3.708096350583043*^9, 3.7080963563232718`*^9}, {
+  3.7082489578371015`*^9, 
+  3.7082489885209584`*^9}},ExpressionUUID->"acccdba7-4cc8-463f-9532-\
 578badae9914"]
 }, Open  ]]
 }, Open  ]],
@@ -1489,11 +1779,11 @@ Cell["Date", "TemplateSubsection",
 Cell[TextData[{
  StyleBox["Last Modified: ",
   FontSize->Medium],
- StyleBox["Monday, July 03, 2017",
+ StyleBox["Wednesday, July 05, 2017",
   FontSize->Medium]
 }], "LastModified",
  CellTags->
-  "LastModifiedDate",ExpressionUUID->"42e93caf-49e7-46a8-804c-cbbc765e1d38"],
+  "LastModifiedDate",ExpressionUUID->"5904a19d-b7bb-4f3a-905b-7184acdd5540"],
 
 Cell[BoxData[
  ButtonBox[
@@ -1521,7 +1811,7 @@ Cell[BoxData[
   Method->"Preemptive"]], "Input",ExpressionUUID->"387919cf-8311-4ba3-bacd-\
 ed733929beeb"]
 }, Open  ]]
-}, Closed]]
+}, Open  ]]
 },
 WindowSize->{1920, 980},
 WindowMargins->{{-4, Automatic}, {Automatic, -4}},
@@ -6818,42 +7108,42 @@ CellTagsIndex->{
    ea56f0aff682",
    CellTags->"Affiliation"]},
  "DataSources"->{
-  Cell[78072, 1430, 257, 4, 
-  85, "TemplateSubsection", "ExpressionUUID" -> "595aec4a-a293-426a-
+  Cell[87248, 1691, 257, 4, 
+  67, "TemplateSubsection", "ExpressionUUID" -> "595aec4a-a293-426a-
    b50c-4acce4123cb2",
    CellTags->"DataSources"]},
  "FutureDirections"->{
-  Cell[78332, 1436, 276, 4, 
-  85, "TemplateSubsection", "ExpressionUUID" -> "e5647c6a-
+  Cell[87616, 1702, 276, 4, 
+  56, "TemplateSubsection", "ExpressionUUID" -> "e5647c6a-
    cb6b-4235-8887-8cfbb24ef769",
    CellTags->"FutureDirections"]},
  "References"->{
-  Cell[78611, 1442, 313, 5, 
-  85, "TemplateSubsection", "ExpressionUUID" -> "f66f7ca2-dcb9-4c06-9d0a-
+  Cell[88180, 1719, 313, 5, 
+  67, "TemplateSubsection", "ExpressionUUID" -> "f66f7ca2-dcb9-4c06-9d0a-
    f2cc48d9fd79",
    CellTags->"References"]},
  "Keywords"->{
-  Cell[78949, 1451, 182, 2, 
-  85, "TemplateSubsection", "ExpressionUUID" -> "0a9d4fd1-d336-4f32-
+  Cell[88867, 1740, 182, 2, 
+  67, "TemplateSubsection", "ExpressionUUID" -> "0a9d4fd1-d336-4f32-
    b85d-12e6f9eed8ed",
    CellTags->"Keywords"]},
  "LastModifiedDate"->{
-  Cell[80132, 1488, 229, 7, 
-  42, "LastModified", "ExpressionUUID" -> "42e93caf-49e7-46a8-804c-
-   cbbc765e1d38",
+  Cell[90144, 1778, 232, 7, 
+  29, "LastModified", "ExpressionUUID" -> "5904a19d-
+   b7bb-4f3a-905b-7184acdd5540",
    CellTags->"LastModifiedDate"]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"Author", 392484, 6804},
- {"Mentor", 392637, 6809},
- {"Affiliation", 392795, 6814},
- {"DataSources", 392958, 6819},
- {"FutureDirections", 393132, 6824},
- {"References", 393305, 6829},
- {"Keywords", 393470, 6834},
- {"LastModifiedDate", 393641, 6839}
+ {"Author", 402499, 7094},
+ {"Mentor", 402652, 7099},
+ {"Affiliation", 402810, 7104},
+ {"DataSources", 402973, 7109},
+ {"FutureDirections", 403147, 7114},
+ {"References", 403320, 7119},
+ {"Keywords", 403485, 7124},
+ {"LastModifiedDate", 403656, 7129}
  }
 *)
 (*NotebookFileOutline
@@ -6896,68 +7186,98 @@ Cell[60648, 1037, 6920, 145, 64, "TemplateSectionDivider", "ExpressionUUID" \
 Cell[CellGroupData[{
 Cell[67593, 1186, 507, 16, 67, "TemplateSection", "ExpressionUUID" -> \
 "2d847a34-66d2-4516-b974-ff32b660a5bf"],
-Cell[68103, 1204, 141, 3, 30, "Text", "ExpressionUUID" -> \
+Cell[68103, 1204, 684, 18, 182, "Text", "ExpressionUUID" -> \
 "0746cc05-9ff2-4dea-862b-2a8fdc8e7d89"]
 }, Open  ]],
-Cell[68259, 1210, 7856, 162, 64, "TemplateSectionDivider", "ExpressionUUID" \
+Cell[68802, 1225, 7856, 162, 64, "TemplateSectionDivider", "ExpressionUUID" \
 -> "003f9a05-6bef-4291-b1a6-f10f8847b0c0"],
 Cell[CellGroupData[{
-Cell[76140, 1376, 186, 3, 67, "TemplateSection", "ExpressionUUID" -> \
+Cell[76683, 1391, 186, 3, 67, "TemplateSection", "ExpressionUUID" -> \
 "ba97f0a3-c165-451d-bf4c-74c0b4a4f36e"],
-Cell[76329, 1381, 270, 4, 68, "TemplateSubsection", "ExpressionUUID" -> \
-"a4e3d008-4eb0-4d8e-bed7-33623658821c"],
 Cell[CellGroupData[{
-Cell[76624, 1389, 183, 3, 55, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[76894, 1398, 270, 4, 67, "TemplateSubsection", "ExpressionUUID" -> \
+"a4e3d008-4eb0-4d8e-bed7-33623658821c"],
+Cell[77167, 1404, 453, 9, 49, "Text", "ExpressionUUID" -> \
+"c265d756-9f67-45b6-b31b-5eaa11f459c4"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[77657, 1418, 183, 3, 56, "TemplateSubsection", "ExpressionUUID" -> \
 "c54bc669-1d00-4e87-877b-cfd746ce37fa"],
-Cell[76810, 1394, 169, 3, 30, "TemplateComment", "ExpressionUUID" -> \
+Cell[77843, 1423, 169, 3, 30, "TemplateComment", "ExpressionUUID" -> \
 "a672a6f1-f8fa-4628-83e3-5438bd707f89"],
 Cell[CellGroupData[{
-Cell[77004, 1401, 162, 3, 28, "Item", "ExpressionUUID" -> \
+Cell[78037, 1430, 234, 4, 29, "Item", "ExpressionUUID" -> \
 "66883a1c-6bbf-428e-84bc-a7c0ba375299"],
-Cell[77169, 1406, 157, 3, 28, "Item", "ExpressionUUID" -> \
+Cell[78274, 1436, 197, 4, 29, "Item", "ExpressionUUID" -> \
 "7c9362c5-ee46-4875-bc37-652189adc85e"]
 }, Open  ]]
-}, Open  ]],
-Cell[77353, 1413, 186, 3, 68, "TemplateSubsection", "ExpressionUUID" -> \
+}, Closed]],
+Cell[78498, 1444, 186, 3, 56, "TemplateSubsection", "ExpressionUUID" -> \
 "a55786c3-e7a6-4cf3-bb54-b05532239df1"],
-Cell[77542, 1418, 249, 4, 55, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[CellGroupData[{
+Cell[78709, 1451, 249, 4, 56, "TemplateSubsection", "ExpressionUUID" -> \
 "5a247b12-4033-40a4-960f-65d46bf0f9c2"],
-Cell[77794, 1424, 275, 4, 85, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[78961, 1457, 266, 6, 30, "Text", "ExpressionUUID" -> \
+"97e67834-d928-4b1f-9294-830ffc4b00ce"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[79264, 1468, 305, 5, 67, "TemplateSubsection", "ExpressionUUID" -> \
 "f27ae70e-91c7-4506-8835-21b281190700"],
-Cell[78072, 1430, 257, 4, 85, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[79572, 1475, 185, 3, 30, "Text", "ExpressionUUID" -> \
+"07eff70d-bbf9-4839-a6cd-cf9be70515ef"],
+Cell[79760, 1480, 4545, 123, 236, "Input", "ExpressionUUID" -> \
+"7324cf5e-b6e6-4ec9-83b6-baffe0eddcef"],
+Cell[84308, 1605, 162, 3, 30, "Text", "ExpressionUUID" -> \
+"ea0d1449-eec3-4114-be90-9fb5324d532e"],
+Cell[84473, 1610, 2738, 76, 241, "Input", "ExpressionUUID" -> \
+"5e32008f-b369-47db-a3d2-00348f3d3aa1"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[87248, 1691, 257, 4, 67, "TemplateSubsection", "ExpressionUUID" -> \
 "595aec4a-a293-426a-b50c-4acce4123cb2",
  CellTags->"DataSources"],
-Cell[78332, 1436, 276, 4, 85, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[87508, 1697, 71, 0, 30, "Text", "ExpressionUUID" -> \
+"8bc5af05-f95e-4bd8-8907-73b58c21e10c"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[87616, 1702, 276, 4, 56, "TemplateSubsection", "ExpressionUUID" -> \
 "e5647c6a-cb6b-4235-8887-8cfbb24ef769",
  CellTags->"FutureDirections"],
-Cell[78611, 1442, 313, 5, 85, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[87895, 1708, 248, 6, 30, "Text", "ExpressionUUID" -> \
+"8c111310-46dc-4cfc-921a-a848e06cd50f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[88180, 1719, 313, 5, 67, "TemplateSubsection", "ExpressionUUID" -> \
 "f66f7ca2-dcb9-4c06-9d0a-f2cc48d9fd79",
  CellTags->"References"],
+Cell[88496, 1726, 334, 9, 30, "Input", "ExpressionUUID" -> \
+"265f22ec-5756-4a5e-a350-7445ac487416"]
+}, Open  ]],
 Cell[CellGroupData[{
-Cell[78949, 1451, 182, 2, 85, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[88867, 1740, 182, 2, 67, "TemplateSubsection", "ExpressionUUID" -> \
 "0a9d4fd1-d336-4f32-b85d-12e6f9eed8ed",
  CellTags->"Keywords"],
-Cell[79134, 1455, 230, 4, 45, "TemplateComment", "ExpressionUUID" -> \
+Cell[89052, 1744, 230, 4, 30, "TemplateComment", "ExpressionUUID" -> \
 "98efa464-d671-4dc2-97d9-29e7a0668393"],
 Cell[CellGroupData[{
-Cell[79389, 1463, 206, 4, 45, "Item", "ExpressionUUID" -> \
+Cell[89307, 1752, 253, 4, 29, "Item", "ExpressionUUID" -> \
 "3b9a0db3-df49-4532-b956-8ec2c42dd8bf"],
-Cell[79598, 1469, 157, 3, 45, "Item", "ExpressionUUID" -> \
+Cell[89563, 1758, 204, 4, 29, "Item", "ExpressionUUID" -> \
 "acccdba7-4cc8-463f-9532-578badae9914"]
 }, Open  ]]
 }, Open  ]],
-Cell[79782, 1476, 160, 3, 102, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[89794, 1766, 160, 3, 67, "TemplateSubsection", "ExpressionUUID" -> \
 "7829dc32-1c2b-44a2-9c28-0b354f138b29"],
 Cell[CellGroupData[{
-Cell[79967, 1483, 162, 3, 85, "TemplateSubsection", "ExpressionUUID" -> \
+Cell[89979, 1773, 162, 3, 56, "TemplateSubsection", "ExpressionUUID" -> \
 "1cd568fb-8340-49f7-8b1e-208734b6bb99"],
-Cell[80132, 1488, 229, 7, 42, "LastModified", "ExpressionUUID" -> \
-"42e93caf-49e7-46a8-804c-cbbc765e1d38",
+Cell[90144, 1778, 232, 7, 29, "LastModified", "ExpressionUUID" -> \
+"5904a19d-b7bb-4f3a-905b-7184acdd5540",
  CellTags->"LastModifiedDate"],
-Cell[80364, 1497, 917, 24, 64, "Input", "ExpressionUUID" -> \
+Cell[90379, 1787, 917, 24, 41, "Input", "ExpressionUUID" -> \
 "387919cf-8311-4ba3-bacd-ed733929beeb"]
 }, Open  ]]
-}, Closed]]
+}, Open  ]]
 }
 ]
 *)
